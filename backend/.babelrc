@@ -1,0 +1,7 @@
+{ "presets": ["env", "stage-0"] }
+
+//mongo atlas
+//MONGO_URI = mongodb+srv://phihph128980:hohoangphi0401@cluster0.79qfk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
+//mongodb
+//MONGO_URI = mongodb://localhost:27017/we16102
