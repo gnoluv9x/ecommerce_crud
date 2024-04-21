@@ -1,9 +1,8 @@
-import React from "react";
-import { useEffect, useState, useRef } from "react";
+import Cookie from "js-cookie";
+import React, { useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { Link, useNavigate } from "react-router-dom";
-import { isAuthenticated, logout } from "../../utils/util";
-import userApi from "../../api/userApi";
+import { isAuthenticated } from "../../utils/util";
 
 const Header = () => {
   const [searchText, setSearchText] = useState("");
@@ -12,13 +11,7 @@ const Header = () => {
     e.preventDefault();
     navigate(`/search?name=${searchText}`);
   };
-  let productOnCart = localStorage.getItem("cart");
-  let cartNumberStorage = localStorage.getItem("cartNumber");
-  const [cartNumber, setCartNumber] = useState();
-  useEffect(() => {
-    setCartNumber(cartNumberStorage);
-  }, [productOnCart]);
-
+  const [cartNumber, setCartNumber] = useState(localStorage.getItem("cartNumber"));
   const { user } = isAuthenticated();
 
   const logout = () => {
@@ -29,7 +22,22 @@ const Header = () => {
     localStorage.removeItem("cart");
     localStorage.removeItem("cartNumber");
     localStorage.removeItem("totalPrice");
+    Cookie.remove("refreshToken");
+    Cookie.remove("accessToken");
   };
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setCartNumber(localStorage.getItem("cartNumber"));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <div>
       <div className="header">

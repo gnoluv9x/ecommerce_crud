@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { isAuthenticated, prices, SuccessMessage, WarningMessage } from "../../utils/util";
-import { Order_listByUser, OrderByUser_remove } from "../../slice/orderSlice";
+import { OrderByUser_remove, Order_listByUser } from "../../slice/orderSlice";
+import { SuccessMessage, WarningMessage, isAuthenticated, prices } from "../../utils/util";
 
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
@@ -53,7 +52,6 @@ const OrderPage = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="div-content bg-gray-100 pb-8">
         <div className="content1 mx-auto" style={{ maxWidth: "1200px" }}>
           <div className="pt-2">

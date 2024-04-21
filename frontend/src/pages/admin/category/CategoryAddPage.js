@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { Category_create } from "../../../slice/categorySlice";
 import { useNavigate, Link } from "react-router-dom";
@@ -35,9 +35,8 @@ function CategoryAddPage() {
   };
   return (
     <>
-      <ToastContainer />
       <div>
-        <div className="content-wrapper pb-[360px]">
+        <div className="content-wrapper pb-[360px] overflow-hidden">
           <div className="container mx-auto pt-5 text-center">
             <h3 className="text-center font-bold pb-4 text-xl">THÊM DANH MỤC</h3>
             <form className="text-center" onSubmit={handleSubmit(onSubmit)}>

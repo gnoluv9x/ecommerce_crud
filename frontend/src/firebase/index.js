@@ -1,11 +1,12 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBonQ2R77HASiru8jmT_4D5REjpTxMgI78",
-  authDomain: "ecmascript-9d7cc.firebaseapp.com",
-  projectId: "ecmascript-9d7cc",
-  storageBucket: "ecmascript-9d7cc.appspot.com",
-  messagingSenderId: "1241059716",
-  appId: "1:1241059716:web:e092bf906ff749de454dd1",
+  apiKey: "AIzaSyAYpfDsir0ThNgglhaV2kldts0xOdQJF8k",
+  authDomain: "ecommerce-crud-54e48.firebaseapp.com",
+  projectId: "ecommerce-crud-54e48",
+  storageBucket: "ecommerce-crud-54e48.appspot.com",
+  messagingSenderId: "88343030554",
+  appId: "1:88343030554:web:a012832eee36acd2c85aa3",
+  measurementId: "G-Q2EBD1B93K",
 };
 const firebase = initializeApp(firebaseConfig);

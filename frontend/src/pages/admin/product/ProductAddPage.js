@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
@@ -30,24 +29,29 @@ const ProductAddPage = () => {
     const img = data.image[0];
     const storage = getStorage();
     const storageRef = ref(storage, `images/${img.name}`);
+
     const UploadTask = uploadBytesResumable(storageRef, img);
-    uploadBytes(storageRef, img).then(() => {
-      getDownloadURL(UploadTask.snapshot.ref).then(url => {
-        data.image = url;
-        console.log(data);
-        dispatch(Product_create(data));
-        SuccessMessage("Thêm sản phẩm thành công!");
-        setTimeout(() => {
-          navigate("/admin/products");
-        }, 1500);
+
+    uploadBytes(storageRef, img)
+      .then(() => {
+        getDownloadURL(UploadTask.snapshot.ref).then(url => {
+          data.image = url;
+          console.log(data);
+          dispatch(Product_create(data));
+          SuccessMessage("Thêm sản phẩm thành công!");
+          setTimeout(() => {
+            navigate("/admin/products");
+          }, 1500);
+        });
+      })
+      .catch(err => {
+        console.log("Debug_here err: ", err);
       });
-    });
   };
   return (
     <>
-      <ToastContainer />
       <div>
-        <div className="content-wrapper pb-[360px]">
+        <div className="content-wrapper pb-[360px] overflow-hidden">
           <div className="container mx-auto pt-5">
             <h3 className="text-center font-bold pb-4 text-xl">THÊM SẢN PHẨM</h3>
             <form onSubmit={handleSubmit(onSubmit)}>

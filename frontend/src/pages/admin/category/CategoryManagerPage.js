@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ToastContainer } from "react-toastify";
 import { WarningMessage, SuccessMessage } from "../../../utils/util";
 import { Link } from "react-router-dom";
 import { Category_remove } from "../../../slice/categorySlice";
@@ -37,7 +36,6 @@ const CategoryManagerPage = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="pb-[500px]">
         {loading === false ? (
           <div className="pb-[300px]">

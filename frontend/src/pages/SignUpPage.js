@@ -1,10 +1,10 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { WarningMessage, SuccessMessage } from "../utils/util";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { SignUp } from "../slice/authSlice";
+import { ErrorMessage, SuccessMessage, WarningMessage } from "../utils/util";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 function SignUpPage() {
   const {
@@ -22,12 +22,22 @@ function SignUpPage() {
       delete data.confirmPassword;
       data.permission = 1;
       try {
-        dispatch(SignUp(data));
-        SuccessMessage("Đăng ký thành công!");
-        setTimeout(() => {
-          navigate("/signin");
-        }, 2000);
+        dispatch(SignUp(data))
+          .then(unwrapResult)
+          .then(resp => {
+            if (resp.status) {
+              SuccessMessage("Đăng ký thành công!");
+              navigate("/signin");
+            } else {
+              throw resp.message;
+            }
+          })
+          .catch(err => {
+            console.log("Debug_here err: ", err);
+            ErrorMessage(err || "Đăng ký thất bại");
+          });
       } catch (error) {
+        console.log("Debug_here error: ", { error });
         WarningMessage(error.response.data.error);
       }
     }
@@ -38,7 +48,6 @@ function SignUpPage() {
       className="container mx-auto bg-gray-200 border border-gray-300 mt-24"
       style={{ width: "600px" }}
     >
-      <ToastContainer />
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-center pt-5 text-3xl font-semibold">ĐĂNG KÝ</h2>
         <div className="ml-32 mt-5">
@@ -88,7 +97,7 @@ function SignUpPage() {
           <p className="error text-red-500 text-sm font-semibold" />
           <p className="mt-3  mb-1">
             <i className="fas fa-key mr-2" />
-            Conffirm Password
+            Confirm Password
           </p>
           <input
             className="px-2 py-1 rounded-md checkValidate"
@@ -130,7 +139,7 @@ function SignUpPage() {
         <div className="text-center border-t border-gray-300">
           <div className="hover:bg-gray-300 py-2">
             <button className="font-semibold">
-              <Link to="/#/signin">Đã có tài khoản? Đăng nhập ngay</Link>
+              <Link to="/signin">Đã có tài khoản? Đăng nhập ngay</Link>
             </button>
           </div>
         </div>

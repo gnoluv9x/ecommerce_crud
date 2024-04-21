@@ -1,7 +1,6 @@
 import express from "express";
-import { list, create, orderById, read, remove, update, orderByUser } from "../controllers/order";
+import { create, list, orderById, orderByUser, read, remove, update } from "../controllers/order";
 import { userById } from "../controllers/user";
-import { requireSignin, isAdmin, isAuth } from "../controllers/auth";
 
 const router = express.Router();
 

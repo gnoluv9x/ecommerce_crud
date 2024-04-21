@@ -1,12 +1,8 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { ToastContainer } from "react-toastify";
+import React, { useEffect, useState } from "react";
 import productApi from "../../api/productApi";
 import Banner from "../../components/client/Banner";
 import Categories from "../../components/client/Categories";
 import ListProduct from "../../components/client/ListProduct";
-import { Product_list } from "../../slice/productSlice";
 
 export default function HomePage() {
   // const dispatch = useDispatch();
@@ -45,7 +41,6 @@ export default function HomePage() {
   };
   return (
     <>
-      <ToastContainer />
       <Banner></Banner>
       <div className="content bg-gray-100 pb-8 pt-8" id="content">
         <div className=" mx-auto grid grid-cols-4 gap-8" style={{ width: "1200px" }}>

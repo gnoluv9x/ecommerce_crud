@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { ToastContainer } from "react-toastify";
+import React, { useEffect, useState } from "react";
+import Spin from "react-cssfx-loading/lib/Spin";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import userApi from "../../../api/userApi";
 import { User_read, User_update } from "../../../slice/userSlice";
 import { SuccessMessage } from "../../../utils/util";
-import userApi from "../../../api/userApi";
-import Spin from "react-cssfx-loading/lib/Spin";
 
 const UserUpdate = () => {
   const {
@@ -43,7 +42,6 @@ const UserUpdate = () => {
   };
   return (
     <>
-      <ToastContainer />
       <div className="content-wrapper pb-[300px]">
         {loading === false ? (
           <div className="pb-[500px]">
@@ -114,11 +112,11 @@ const UserUpdate = () => {
             </div>
             <div>
               <div className="text-center mt-2">
-                <a href="/#/listuser">
+                <Link to="/admin/users">
                   <button className="btn btn-primary" type="button">
                     Danh sách USER{" "}
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

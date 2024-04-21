@@ -1,12 +1,19 @@
+import dotenv from "dotenv";
+import { generateAccessToken, generateRefreshToken } from "../helper";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
-const nodemailer = require("nodemailer");
+dotenv.config();
 
-const expressJwt = require("express-jwt");
+export async function signup(req, res) {
+  const { email } = req.body;
+  const existingUser = await User.findOne({ email: email.toLowerCase() });
 
-export const signup = (req, res) => {
+  if (existingUser) {
+    return res.status(200).json({ status: false, message: "Email đã tồn tại" });
+  }
+
   const user = new User(req.body);
-  // console.log(user);
+
   user.save((err, data) => {
     if (err) {
       return res.status(400).json({
@@ -15,86 +22,56 @@ export const signup = (req, res) => {
     }
     user.salt = undefined;
     user.hashed_password = undefined;
-    res.json(data);
+    res.json({
+      status: true,
+      data,
+    });
   });
-  // const { name, email, hashed_password } = new User(req.body);
-  // console.log(name);
-  // console.log(email);
-  // console.log(hashed_password);
-  // User.findOne({ email }).exec(async (err, user) => {
-  //     if (user) {
-  //         return res.status(400).json({
-  //             error: "Email đã tồn tại!"
-  //         });
-  //     }
-  //     const token = jwt.sign({ name, email, hashed_password }, process.env.JWT_ACCOUNT_ACTIVATION, {expiresIn: '10m'});
+}
 
-  //     let testAccount = await nodemailer.createTestAccount();
-
-  //     let transporter = nodemailer.createTransport({
-  //         host: "smtp.ethereal.email",
-  //         port: 587,
-  //         secure: false,
-  //         auth: {
-  //             user: testAccount.user, // tạo user
-  //             pass: testAccount.pass, // tạo mật khẩu
-  //         },
-  //     });
-
-  //     let info = await transporter.sendMail({
-  //         from: process.env.EMAIL_FROM,
-  //         to: email,
-  //         subject: `Account activation link`,
-  //         html: `
-  //             <h1>Please use the following link to activate your account</h1>
-  //             <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
-  //             <hr />
-  //             <p>This email may contain sensetive information</p>
-  //             <p>${process.env.CLIENT_URL}</p>
-  //         `
-  //     });
-  //     console.log("Message sent: %s", info.messageId);
-  //     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-  // })
-};
-export const signin = (req, res) => {
+export async function signin(req, res) {
   const { email, password } = req.body;
   User.findOne({ email }, (error, user) => {
     if (error || !user) {
-      return res.status(400).json({
-        error: "Email không tồn tại",
+      return res.status(404).json({
+        status: false,
+        message: "Email không tồn tại",
       });
     }
 
     if (!user.authenticate(password)) {
       return res.status(401).json({
-        error: "Mật khẩu chưa chính xác",
+        status: false,
+        message: "Mật khẩu không chính xác",
       });
     }
-    // Tự động tạo ra một mã cùng với user và mã secret
-    const token = jwt.sign({ _id: user._id }, "abc11");
-    // persist the token as 't' in cookie with
-    res.cookie("t", token, { expire: new Date() + 9999 });
-    // return response with user and token to frontend client
+    // Tạo access token
+    const accessToken = generateAccessToken(user._id);
+
+    // Tạo refresh token
+    const refreshToken = generateRefreshToken(user._id);
+    const maxAge = process.env.REFRESH_TOKEN_COOKIE_EXPIRED_IN_DAYS;
+    res.cookie("refreshToken", refreshToken, { maxAge: parseInt(maxAge) * 24 * 60 * 60 * 1000 });
+    res.cookie("accessToken", accessToken, { maxAge: parseInt(maxAge) * 24 * 60 * 60 * 1000 });
+
     const { _id, name, email, permission } = user;
+
     return res.json({
-      token,
+      status: true,
+      token: accessToken,
       user: { _id, email, name, permission },
     });
   });
-};
-export const signout = (req, res) => {
-  res.clearCookie("t");
+}
+
+export async function signout(req, res) {
+  res.clearCookie("refreshToken");
   res.json({
     message: "Đăng xuất thành công",
   });
-};
-export const requireSignin = expressJwt({
-  secret: "abc11",
-  algorithms: ["HS256"],
-  userProperty: "auth",
-});
-export const isAuth = (req, res, next) => {
+}
+
+export async function isAuth(req, res, next) {
   console.log(req.profile);
   console.log("auth", req.auth);
   // console.log(req.profile._id);
@@ -107,12 +84,40 @@ export const isAuth = (req, res, next) => {
     });
   }
   next();
-};
-export const isAdmin = (req, res, next) => {
+}
+
+export async function isAdmin(req, res, next) {
   if (req.profile.permission == 0) {
     return res.status(403).json({
       error: "Không phải ADMIN, từ chối quyền truy cập!",
     });
   }
   next();
-};
+}
+
+export async function refreshToken(req, res, next) {
+  // Lấy refresh token từ cookie
+  const refreshToken = req.cookies.refreshToken;
+
+  // Kiểm tra xem refresh token có tồn tại không
+  if (!refreshToken) {
+    return res.status(404).json({ error: "Không tìm thấy refresh token trong cookie." });
+  }
+
+  try {
+    // Giải mã refresh token để lấy thông tin payload
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    if (decoded.exp * 1000 <= Date.now()) {
+      throw new Error("Hết hạn refreshToken");
+    }
+
+    // Tạo access token mới từ thông tin payload
+    const accessToken = generateAccessToken("1123");
+
+    // Trả về access token mới
+    res.status(200).json({ accessToken });
+  } catch (error) {
+    console.error("Lỗi khi giải mã hoặc tạo access token:", error);
+    res.status(500).json({ error: "Đã xảy ra lỗi khi xử lý yêu cầu." });
+  }
+}

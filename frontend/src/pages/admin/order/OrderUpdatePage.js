@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
-import { ToastContainer } from "react-toastify";
-import { Order_update, Order_read } from "../../../slice/orderSlice";
-import { SuccessMessage } from "../../../utils/util";
+import React, { useEffect, useState } from "react";
 import Spin from "react-cssfx-loading/lib/Spin";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import orderApi from "../../../api/orderApi";
+import { Order_read, Order_update } from "../../../slice/orderSlice";
+import { SuccessMessage } from "../../../utils/util";
 
 const OrderUpdatePage = () => {
   const {
@@ -22,7 +21,6 @@ const OrderUpdatePage = () => {
   useEffect(() => {
     dispatch(Order_read(id));
   }, [id]);
-  const orderCurrent = useSelector(state => state.order.data.order);
   const loading = useSelector(state => state.order.loading);
   const [order, setOrder] = useState();
   useEffect(() => {
@@ -48,7 +46,6 @@ const OrderUpdatePage = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="pb-[660px]">
         {loading === false ? (
           <div className="content-wrapper ">

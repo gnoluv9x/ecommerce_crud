@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
+import Spin from "react-cssfx-loading/lib/Spin";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { isAuthenticated, prices, SuccessMessage, WarningMessage } from "../../../utils/util";
 import { Order_list, Order_remove } from "../../../slice/orderSlice";
-import Spin from "react-cssfx-loading/lib/Spin";
+import { SuccessMessage, WarningMessage, prices } from "../../../utils/util";
 
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
@@ -43,7 +42,6 @@ const OrderManager = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="pb-[500px]">
         {loading === false ? (
           <div className="pb-[400px]">

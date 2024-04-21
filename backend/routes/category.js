@@ -1,15 +1,14 @@
 import express from "express";
 import {
+  categoryById,
   create,
   list,
-  categoryById,
-  read,
-  update,
-  remove,
   listRelated,
+  read,
+  remove,
+  update,
 } from "../controllers/category";
 import { userById } from "../controllers/user";
-import { requireSignin, isAdmin, isAuth } from "../controllers/auth";
 
 const router = express.Router();
 

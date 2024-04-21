@@ -1,14 +1,12 @@
 import React from "react";
-import { ToastContainer } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { Product_remove } from "../../../slice/productSlice";
-import { prices, SuccessMessage, WarningMessage } from "../../../utils/util";
 import Spin from "react-cssfx-loading/lib/Spin";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { Product_remove } from "../../../slice/productSlice";
+import { SuccessMessage, prices } from "../../../utils/util";
 
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import categoryApi from "../../../api/categoryApi";
 
 const ProductManagerPage = () => {
   const products = useSelector(state => state.product.data.products);
@@ -37,7 +35,6 @@ const ProductManagerPage = () => {
   };
   return (
     <>
-      <ToastContainer />
       <div className="pb-[500px]">
         {loading === false ? (
           <div className="pb-[300px]">

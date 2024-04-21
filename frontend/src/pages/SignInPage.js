@@ -1,10 +1,10 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { ToastContainer } from "react-toastify";
-import { WarningMessage, SuccessMessage } from "../utils/util";
+import { Link, useNavigate } from "react-router-dom";
 import { SignIn } from "../slice/authSlice";
+import { SuccessMessage, WarningMessage } from "../utils/util";
 
 function SignInPage() {
   const {
@@ -15,27 +15,33 @@ function SignInPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = async data => {
-    const SignInResult = await dispatch(SignIn(data));
-    // const currentUser = unwrapResult(SignInResult);
-    console.log("SignInResult: ", SignInResult);
-
-    if (SignInResult.payload.token) {
-      localStorage.setItem("user", JSON.stringify(SignInResult.payload));
-      SuccessMessage("Đăng nhập thành công!");
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
-    } else {
-      WarningMessage(SignInResult.payload.response.data.error);
-    }
+  const onSubmit = data => {
+    dispatch(SignIn(data))
+      .then(unwrapResult)
+      .then(result => {
+        if (result?.status) {
+          localStorage.setItem("user", JSON.stringify(result));
+          SuccessMessage("Đăng nhập thành công!");
+          navigate("/");
+        } else {
+          throw result?.message;
+        }
+      })
+      .catch(err => {
+        console.log("Debug_here err: ", err);
+        WarningMessage(err.response.data.error);
+      });
   };
+
+  const handleForgotPassword = event => {
+    event.stopPropagation();
+  };
+
   return (
     <div
       className="container mx-auto bg-gray-200 border border-gray-300 mt-32 "
       style={{ width: "600px" }}
     >
-      <ToastContainer />
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-center pt-5 text-3xl font-semibold">ĐĂNG NHẬP</h2>
         <div className="ml-32 mt-5">
@@ -49,7 +55,8 @@ function SignInPage() {
             style={{ width: "330px" }}
             type="email"
             id="email"
-            defaultValue="phi1@gmail.com"
+            // autoComplete="one-time-code"
+            // defaultValue="phi1@gmail.com"
           />
           {errors.email && <p className="text-red-500 font-bold">Hãy nhập email!</p>}
           <p className="mt-3  mb-1">
@@ -62,16 +69,17 @@ function SignInPage() {
             style={{ width: "330px" }}
             type="password"
             id="password"
-            defaultValue={123456}
+            // autoComplete="one-time-code"
+            // defaultValue={123456}
           />{" "}
           <br />
           {errors.password && <p className="text-red-500 font-bold">Hãy nhập mật khẩu!</p>}
         </div>
-        <div className="mt-2">
+        {/* <div className="mt-2">
           <input type="checkbox" name="remember" defaultValue={1} style={{ marginLeft: "128px" }} />
           <span className="text-sm font-semibold"> Ghi nhớ đăng nhập</span>
           <br />
-        </div>
+        </div> */}
         <div
           id="alert"
           className="mt-3 text-center mx-auto"
@@ -87,11 +95,11 @@ function SignInPage() {
           />
         </div>
         <div className="text-center">
-          <button className="mb-5 px-5 py-1 rounded-lg font-semibold bg-blue-500 mx-auto btn btn-primary">
-            <Link to="/" className="hover:text-gray-300">
+          <Link to="/" className="hover:text-gray-300">
+            <span className="mb-5 px-5 py-1 rounded-lg font-semibold bg-blue-500 mx-auto btn btn-primary">
               Trở về trang chủ
-            </Link>
-          </button>
+            </span>
+          </Link>
         </div>
         <div className="text-center border-t border-gray-300 grid grid-cols-2">
           <div className="hover:bg-gray-300 py-2 border-r border-gray-300 ">
@@ -102,7 +110,9 @@ function SignInPage() {
             </button>
           </div>
           <div className="hover:bg-gray-300 py-2">
-            <button className="font-semibold">Quên mật khẩu?</button>
+            <button type="button" onClick={handleForgotPassword} className="font-semibold">
+              Quên mật khẩu?
+            </button>
           </div>
         </div>
       </form>

@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ["./public/index.html", "./src/*.js", "./src/**/*.js", "./src/**/**/*.js"],
+  purge: ["./public/index.html", "./src/*.js", "./src/**/*.{js,jsx}"],
   mode: "jit",
   darkMode: false,
   theme: {
@@ -8,5 +8,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/aspect-ratio")],
 };

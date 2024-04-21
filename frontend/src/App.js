@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import "./App.css";
-import "./index.css";
-import "./tailwind.css";
 
 import Footer from "./components/client/Footer";
 import Header from "./components/client/Header";
@@ -39,10 +37,9 @@ import PrivateRoute from "./utils/privateRoute";
 import "react-toastify/dist/ReactToastify.css";
 import { Category_list } from "./slice/categorySlice";
 import { Product_list } from "./slice/productSlice";
+import { ScrollToTopRouter } from "./hooks/scrollToTop";
 
 export default function App() {
-  const dispatch = useDispatch();
-
   const [showGoToTop, setShowGoToTop] = useState(false);
   const ScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -58,15 +55,10 @@ export default function App() {
     window.addEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    dispatch(Category_list());
-    dispatch(Product_list());
-  }, []);
-
   return (
     <div className="App">
       <BrowserRouter>
-        <div>
+        <ScrollToTopRouter>
           <Routes>
             {/* Layout Website */}
             <Route path="/" element={<LayoutWebsite />}>
@@ -112,7 +104,7 @@ export default function App() {
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/*" element={<Error404Page />} />
           </Routes>
-        </div>
+        </ScrollToTopRouter>
       </BrowserRouter>
 
       {showGoToTop && (
@@ -136,6 +128,13 @@ function LayoutAdmin() {
   );
 }
 function LayoutWebsite() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(Category_list());
+    dispatch(Product_list());
+  }, []);
+
   return (
     <>
       <Header />

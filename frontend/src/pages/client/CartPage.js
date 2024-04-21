@@ -1,52 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { ToastContainer } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import productApi from "../../api/productApi";
+import { Order_create } from "../../slice/orderSlice";
+import { Product_update } from "../../slice/productSlice";
 import {
-  prices,
-  isAuthenticated,
+  SuccessMessage,
   WarningMessage,
   getCurrentDate,
-  SuccessMessage,
+  isAuthenticated,
+  prices,
 } from "../../utils/util";
-import { Order_create } from "../../slice/orderSlice";
-import { Product_update, Product_read } from "../../slice/productSlice";
-import productApi from "../../api/productApi";
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = isAuthenticated();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: user?.name || "",
+      email: user?.email || "",
+    },
+  });
   let productOnCart = JSON.parse(localStorage.getItem("cart"));
   let cartNumber = localStorage.getItem("cartNumber");
   let totalPrice = localStorage.getItem("totalPrice");
-  const [totalMoney, setTotalMoney] = useState();
-  useEffect(() => {
-    const getTotalPrice = () => {
-      let totalPrice = 0;
-      if (productOnCart !== null) {
-        productOnCart.forEach(item => {
-          let price;
-          price = item.quantity * item.price;
-          totalPrice += price;
-        });
-        localStorage.setItem("totalPrice", JSON.stringify(totalPrice));
-      }
-
-      setTotalMoney(totalPrice);
-    };
-    getTotalPrice();
-  }, [productOnCart]);
-
-  const { user } = isAuthenticated();
 
   const alertLogin = () => {
-    WarningMessage("Hãy đăng nhập để đặt hàng!");
+    // WarningMessage("Hãy đăng nhập để đặt hàng!");
+    navigate("/signin");
   };
   const [toggleOrder, setToggleOrder] = useState(false);
   // useEffect(() => {
@@ -99,9 +87,78 @@ const CartPage = () => {
       navigate("/order");
     }, 1500);
   };
+
+  const handleChangeQuantity = (type, itemId) => {
+    const currentCardItem = productOnCart.find(item => item.id === itemId);
+
+    if (!currentCardItem) {
+      WarningMessage("Sản phẩm không tồn tại trong giỏ hàng");
+      return;
+    }
+
+    let newCart = productOnCart;
+
+    if (type === "desc") {
+      if (currentCardItem.quantity === 1) {
+        return handleRemoveItem(itemId);
+      } else {
+        const newQuantity = currentCardItem.quantity - 1;
+        newCart = productOnCart.map(cartItem => {
+          if (cartItem.id === itemId) {
+            cartItem.quantity = newQuantity;
+          }
+
+          return cartItem;
+        });
+      }
+    }
+
+    if (type === "asc") {
+      const newQuantity = currentCardItem.quantity + 1;
+      newCart = productOnCart.map(cartItem => {
+        if (cartItem.id === itemId) {
+          cartItem.quantity = newQuantity;
+        }
+
+        return cartItem;
+      });
+    }
+
+    const totalPrice = newCart.reduce(
+      (total, current) => (total += current.price * current.quantity),
+      0
+    );
+
+    localStorage.setItem("cartNumber", newCart.length);
+    localStorage.setItem("totalPrice", totalPrice);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    dispatchEvent(new Event("storage"));
+    navigate("/cart");
+  };
+
+  const handleRemoveItem = cartId => {
+    const newCart = productOnCart.filter(cartItem => cartItem.id !== cartId);
+
+    if (newCart.length === 0) {
+      localStorage.removeItem("cart");
+      localStorage.removeItem("cartNumber");
+      localStorage.removeItem("totalPrice");
+    } else {
+      const totalPrice = newCart.reduce(
+        (total, currentItem) => (total += currentItem.quantity * currentItem.price),
+        0
+      );
+      localStorage.setItem("cartNumber", newCart.length);
+      localStorage.setItem("totalPrice", totalPrice);
+      localStorage.setItem("cart", JSON.stringify(newCart));
+      dispatchEvent(new Event("storage"));
+    }
+
+    navigate("/cart");
+  };
+
   return (
     <>
-      <ToastContainer />
       {productOnCart === null ? (
         <div>
           <div className="text-center text-4xl font-semibold pt-32 pb-4">
@@ -136,24 +193,12 @@ const CartPage = () => {
                   <table>
                     <thead>
                       <tr className="text-center">
-                        <th className="border border-gray-300" style={{ width: "100px" }}>
-                          STT
-                        </th>
-                        <th className="border border-gray-300" style={{ width: "650px" }}>
-                          Tên sản phẩm
-                        </th>
-                        <th className="border border-gray-300" style={{ width: "200px" }}>
-                          Đơn giá
-                        </th>
-                        <th className="border border-gray-300" style={{ width: "100px" }}>
-                          Số lượng
-                        </th>
-                        <th className="border border-gray-300" style={{ width: "200px" }}>
-                          Thành tiền
-                        </th>
-                        <th className="border border-gray-300" style={{ width: "100px" }}>
-                          Xoá
-                        </th>
+                        <th className="border border-gray-300 w-[100px]">STT</th>
+                        <th className="border border-gray-300 w-[650px]">Tên sản phẩm</th>
+                        <th className="border border-gray-300 w-[200px]">Đơn giá</th>
+                        <th className="border border-gray-300 w-[100px]">Số lượng</th>
+                        <th className="border border-gray-300 w-[200px]">Thành tiền</th>
+                        <th className="border border-gray-300 w-[100px]">Xoá</th>
                       </tr>
                     </thead>
                     <tbody id="showListCart">
@@ -172,13 +217,21 @@ const CartPage = () => {
                               <span className="cart_price hidden">{Number(item.price)}</span>
                             </td>
                             <td className="border border-gray-300">
-                              {/* <button className="text-sm border border-gray-600 rounded-lg px-2 text-white btn btn-primary btn_minus" data-id="${item.id}">-</button> */}
-                              <span>{item.quantity}</span>
-                              {/* <button className="text-sm border border-gray-600 rounded-lg px-2 text-white btn btn-primary btn_plus"
-                                                                    onClick={() => { 
-
-                                                                    }}
-                                                                >+</button> */}
+                              <div className="flex justify-center items-center gap-1">
+                                <button
+                                  className="text-sm border border-gray-600 rounded-md px-2 text-white btn_minus cursor-pointer bg-blue-500"
+                                  onClick={() => handleChangeQuantity("desc", item.id)}
+                                >
+                                  -
+                                </button>
+                                <span>{item.quantity}</span>
+                                <button
+                                  className="text-sm border border-gray-600 rounded-lg px-2 text-white btn_plus cursor-pointer bg-blue-500"
+                                  onClick={() => handleChangeQuantity("asc", item.id)}
+                                >
+                                  +
+                                </button>
+                              </div>
                             </td>
                             <td className="border border-gray-300">
                               <span className="cart_cost_show font-semibold">
@@ -195,26 +248,7 @@ const CartPage = () => {
                               <div>
                                 <button
                                   className="text-sm px-1 border border-gray-600 rounded-lg bg-red-500 hover:bg-red-700 text-white btn btn-danger btn-remove"
-                                  onClick={() => {
-                                    console.log(item.id);
-                                    for (let i = 0; i < productOnCart.length; i++) {
-                                      if (productOnCart[i].id === item.id) {
-                                        console.log(productOnCart[i]);
-                                        cartNumber -= productOnCart[i].quantity;
-                                        productOnCart.splice(i, 1);
-                                        localStorage.setItem("cartNumber", cartNumber);
-                                        localStorage.setItem("cart", JSON.stringify(productOnCart));
-                                        navigate("/cart");
-                                      }
-
-                                      if (productOnCart.length === 0) {
-                                        localStorage.removeItem("cart");
-                                        localStorage.removeItem("cartNumber");
-                                        localStorage.removeItem("totalPrice");
-                                        navigate("/cart");
-                                      }
-                                    }
-                                  }}
+                                  onClick={() => handleRemoveItem(item.id)}
                                 >
                                   <i className="px-1 fas fa-trash-alt" />
                                 </button>
@@ -228,7 +262,7 @@ const CartPage = () => {
                         <td colSpan={4} className="border border-gray-400">
                           <p className="text-red-500 font-bold my-3 ml-3 text-lg text-right pr-[100px] uppercase">
                             Tổng tiền: <span id="totalCost" />
-                            {prices(Number(totalMoney)).replace("VND", "Đ")}
+                            {prices(Number(totalPrice)).replace("VND", "Đ")}
                           </p>
                         </td>
                       </tr>
@@ -382,7 +416,7 @@ const CartPage = () => {
                           </h3>
                         </div>
                         <div className="p-3 border">
-                          <div>
+                          <div className="text-white">
                             <input name="checkPay" type="radio" disabled /> Thanh toán tại cửa hàng
                           </div>
                           <div className="mt-1">

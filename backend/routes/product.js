@@ -14,7 +14,6 @@ import {
 } from "../controllers/product";
 import { categoryById } from "../controllers/category";
 import { userById } from "../controllers/user";
-import { requireSignin, isAdmin, isAuth } from "../controllers/auth";
 
 const router = express.Router();
 //Tìm kiếm sản phẩm

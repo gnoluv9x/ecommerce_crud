@@ -5,12 +5,11 @@ import {
   uploadBytes,
   uploadBytesResumable,
 } from "@firebase/storage";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import Spin from "react-cssfx-loading/lib/Spin";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import productApi from "../../../api/productApi";
 import "../../../firebase/index";
 import { Product_read, Product_update } from "../../../slice/productSlice";
@@ -26,7 +25,6 @@ const ProductUpdatePage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const inputRef = useRef();
   useEffect(() => {
     dispatch(Product_read(id));
   }, []);
@@ -35,24 +33,6 @@ const ProductUpdatePage = () => {
   const product = useSelector(state => state.product.data.product);
   console.log(product);
   const loading = useSelector(state => state.product.loading);
-  const [listCategories, setListCategories] = useState(categories);
-  // useEffect(() => {
-  //     reset({
-  //         name: product.name,
-  //         image: product.image,
-  //         price: product.price,
-  //         priceSale: product.priceSale,
-  //         guarantee: product.guarantee,
-  //         quantity: product.quantity,
-  //     })
-  //     let indexCate;
-  //     categories.forEach((item, index) => {
-  //         if (item._id === product.category._id) {
-  //             indexCate = index
-  //         }
-  //     })
-  //     setListCategories(arraySort(categories, indexCate))
-  // }, [id])
 
   useEffect(() => {
     const getProduct = async () => {
@@ -88,10 +68,9 @@ const ProductUpdatePage = () => {
   };
   return (
     <>
-      <ToastContainer />
       <div className="pb-[560px]">
         {loading === false ? (
-          <div className="content-wrapper pb-[360px]">
+          <div className="content-wrapper pb-[360px] overflow-hidden">
             <div className="container mx-auto pt-5">
               <h3 className="text-center font-bold pb-4 text-xl">CẬP NHẬT SẢN PHẨM</h3>
               <form onSubmit={handleSubmit(onSubmit)}>

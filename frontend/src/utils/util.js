@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import jwt_decode from "jwt-decode";
 
 export const prices = x => {
   return (x = x.toLocaleString("it-IT", {
@@ -8,9 +7,9 @@ export const prices = x => {
   }));
 };
 
-export const ErrorMessage = error => toast.error(error);
-export const SuccessMessage = success => toast.success(success);
-export const WarningMessage = warning => toast.warning(warning);
+export const ErrorMessage = error => toast.error(error, { autoClose: 500 });
+export const SuccessMessage = success => toast.success(success, { autoClose: 500 });
+export const WarningMessage = warning => toast.warning(warning, { autoClose: 500 });
 
 export const isAuthenticated = () => {
   if (typeof window == "undefined") {
@@ -20,12 +19,6 @@ export const isAuthenticated = () => {
     return JSON.parse(localStorage.getItem("user"));
   } else {
     return false;
-  }
-};
-export const authenticated = accessToken => {
-  const user = jwt_decode(accessToken);
-  if (typeof window !== "undefined") {
-    return localStorage.setItem("user", JSON.stringify(user));
   }
 };
 
@@ -40,11 +33,10 @@ export const arraySort = (arr, index) => {
 export const addToCart = (id, name, image, price) => {
   let cartStorage = localStorage.getItem("cart");
   let screenCart = null;
-  if (cartStorage == null) {
+  if (!cartStorage) {
     screenCart = [];
   } else {
-    screenCart = JSON.parse(cartStorage);
-    console.log(screenCart);
+    screenCart = [...JSON.parse(cartStorage)];
   }
 
   let item = {
@@ -55,31 +47,26 @@ export const addToCart = (id, name, image, price) => {
   };
 
   let existed = screenCart.findIndex(ele => ele.id === item.id);
+
   if (existed === -1) {
     item.quantity = 1;
     screenCart.push(item);
   } else {
-    console.log(screenCart);
-    screenCart[existed].quantity++;
+    screenCart[existed].quantity += 1;
   }
-  console.log(item);
-  localStorage.setItem("cart", JSON.stringify(screenCart));
-};
 
-export const getTotalItemOnCart = () => {
-  let cartStorage = localStorage.getItem("cart");
-  let screenCart = null;
-  if (cartStorage == null) {
-    screenCart = [];
-  } else {
-    screenCart = JSON.parse(cartStorage);
-  }
-  let totalItems = 0;
-  screenCart.forEach(element => {
-    totalItems += element.quantity;
+  let totalPrice = 0;
+  let cartNumber = 0;
+
+  screenCart.forEach(cartItem => {
+    totalPrice += cartItem.quantity * cartItem.price;
+    cartNumber += cartItem.quantity;
   });
-  localStorage.setItem("cartNumber", totalItems);
-  return totalItems;
+
+  localStorage.setItem("cart", JSON.stringify(screenCart));
+  localStorage.setItem("cartNumber", cartNumber);
+  localStorage.setItem("totalPrice", totalPrice);
+  dispatchEvent(new Event("storage"));
 };
 
 export function getCurrentDate(separator = "-") {

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { Link, useParams } from "react-router-dom";
+import productApi from "../../api/productApi";
 import Categories from "../../components/client/Categories";
 import ProductItem from "../../components/client/ProductItem";
-import productApi from "../../api/productApi";
-import { addToCart, getTotalItemOnCart, prices, SuccessMessage } from "../../utils/util";
+import { SuccessMessage, addToCart, prices } from "../../utils/util";
 
 const ProductDetail = () => {
   const { id: idProduct } = useParams();
@@ -21,6 +20,7 @@ const ProductDetail = () => {
   }, [idProduct]);
 
   const [productsRelated, setProductsRelated] = useState([]);
+
   useEffect(() => {
     const getProductsRelated = async () => {
       const { data } = await productApi.relateProduct(idProduct);
@@ -29,9 +29,9 @@ const ProductDetail = () => {
     };
     getProductsRelated();
   }, [idProduct]);
+
   return (
     <div>
-      <ToastContainer />
       <div className="content bg-gray-100 pb-8 pt-5">
         <div className=" mx-auto grid grid-cols-4 gap-5" style={{ width: "1200px" }}>
           <aside className="col-span-1 bg-gray-100">
@@ -79,14 +79,10 @@ const ProductDetail = () => {
                   Mua hàng trước 15/01/2021 Giảm ngay 1.000.000 vnđ
                 </p>
                 <div className="mt-8">
-                  <div
-                    className="bg-red-500 rounded-lg text-center mt-3"
-                    style={{ width: "430px" }}
-                  >
+                  <div className="bg-red-500 rounded-lg text-center mt-3 w-[430px]">
                     <button
                       onClick={() => {
                         addToCart(product._id, product.name, product.image, product.priceSale);
-                        getTotalItemOnCart();
                         SuccessMessage("Thêm sản phẩm vào giỏ hàng thành công!");
                       }}
                     >

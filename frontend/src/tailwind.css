@@ -22,7 +22,6 @@ Use a more readable tab size (opinionated).
 */
 
 html {
-  -moz-tab-size: 4;
   tab-size: 4;
 }
 
@@ -57,16 +56,15 @@ Improve consistency of default fonts in all browsers. (https://github.com/sindre
 
 body {
   font-family:
-    system-ui,
-    -apple-system,
-    /* Firefox supports this but not yet `system-ui` */
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    'Apple Color Emoji',
-    'Segoe UI Emoji';
+		system-ui,
+		-apple-system, /* Firefox supports this but not yet `system-ui` */
+		'Segoe UI',
+		Roboto,
+		Helvetica,
+		Arial,
+		sans-serif,
+		'Apple Color Emoji',
+		'Segoe UI Emoji';
 }
 
 /*
@@ -97,7 +95,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
 abbr[title] {
   -webkit-text-decoration: underline dotted;
-  text-decoration: underline dotted;
+          text-decoration: underline dotted;
 }
 
 /**
@@ -119,12 +117,12 @@ kbd,
 samp,
 pre {
   font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Consolas,
-    'Liberation Mono',
-    Menlo,
-    monospace;
+		ui-monospace,
+		SFMono-Regular,
+		Consolas,
+		'Liberation Mono',
+		Menlo,
+		monospace;
   /* 1 */
   font-size: 1em;
   /* 2 */
@@ -454,12 +452,6 @@ textarea {
   resize: vertical;
 }
 
-input:-ms-input-placeholder,
-textarea:-ms-input-placeholder {
-  opacity: 1;
-  color: #9ca3af;
-}
-
 input::placeholder,
 textarea::placeholder {
   opacity: 1;
@@ -591,9 +583,7 @@ video {
   display: none;
 }
 
-*,
-::before,
-::after {
+*, ::before, ::after {
   --tw-translate-x: 0;
   --tw-translate-y: 0;
   --tw-rotate: 0;
@@ -607,42 +597,15 @@ video {
   --tw-ring-offset-shadow: 0 0 #0000;
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
-  --tw-blur: var(--tw-empty,
-      /*!*/
-      /*!*/
-    );
-  --tw-brightness: var(--tw-empty,
-      /*!*/
-      /*!*/
-    );
-  --tw-contrast: var(--tw-empty,
-      /*!*/
-      /*!*/
-    );
-  --tw-grayscale: var(--tw-empty,
-      /*!*/
-      /*!*/
-    );
-  --tw-hue-rotate: var(--tw-empty,
-      /*!*/
-      /*!*/
-    );
-  --tw-invert: var(--tw-empty,
-      /*!*/
-      /*!*/
-    );
-  --tw-saturate: var(--tw-empty,
-      /*!*/
-      /*!*/
-    );
-  --tw-sepia: var(--tw-empty,
-      /*!*/
-      /*!*/
-    );
-  --tw-drop-shadow: var(--tw-empty,
-      /*!*/
-      /*!*/
-    );
+  --tw-blur: var(--tw-empty,/*!*/ /*!*/);
+  --tw-brightness: var(--tw-empty,/*!*/ /*!*/);
+  --tw-contrast: var(--tw-empty,/*!*/ /*!*/);
+  --tw-grayscale: var(--tw-empty,/*!*/ /*!*/);
+  --tw-hue-rotate: var(--tw-empty,/*!*/ /*!*/);
+  --tw-invert: var(--tw-empty,/*!*/ /*!*/);
+  --tw-saturate: var(--tw-empty,/*!*/ /*!*/);
+  --tw-sepia: var(--tw-empty,/*!*/ /*!*/);
+  --tw-drop-shadow: var(--tw-empty,/*!*/ /*!*/);
   --tw-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
@@ -678,6 +641,59 @@ video {
   .container {
     max-width: 1536px;
   }
+}
+
+.aspect-w-1,
+.aspect-w-2,
+.aspect-w-3,
+.aspect-w-4,
+.aspect-w-5,
+.aspect-w-6,
+.aspect-w-7,
+.aspect-w-8,
+.aspect-w-9,
+.aspect-w-10,
+.aspect-w-11,
+.aspect-w-12,
+.aspect-w-13,
+.aspect-w-14,
+.aspect-w-15,
+.aspect-w-16 {
+  position: relative;
+  padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+}
+
+.aspect-w-1 > *,
+.aspect-w-2 > *,
+.aspect-w-3 > *,
+.aspect-w-4 > *,
+.aspect-w-5 > *,
+.aspect-w-6 > *,
+.aspect-w-7 > *,
+.aspect-w-8 > *,
+.aspect-w-9 > *,
+.aspect-w-10 > *,
+.aspect-w-11 > *,
+.aspect-w-12 > *,
+.aspect-w-13 > *,
+.aspect-w-14 > *,
+.aspect-w-15 > *,
+.aspect-w-16 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.aspect-w-1 {
+  --tw-aspect-w: 1;
+}
+
+.aspect-h-1 {
+  --tw-aspect-h: 1;
 }
 
 .fixed {
@@ -936,6 +952,10 @@ video {
   display: block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .flex {
   display: flex;
 }
@@ -958,6 +978,10 @@ video {
 
 .h-24 {
   height: 6rem;
+}
+
+.h-\[55\%\] {
+  height: 55%;
 }
 
 .h-full {
@@ -988,6 +1012,18 @@ video {
   width: 150px;
 }
 
+.w-\[100px\] {
+  width: 100px;
+}
+
+.w-\[650px\] {
+  width: 650px;
+}
+
+.w-\[200px\] {
+  width: 200px;
+}
+
 .w-\[170px\] {
   width: 170px;
 }
@@ -996,8 +1032,16 @@ video {
   width: 16rem;
 }
 
-.translate-y-24 {
-  --tw-translate-y: 6rem;
+.w-\[430px\] {
+  width: 430px;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+.translate-y-44 {
+  --tw-translate-y: 11rem;
   transform: var(--tw-transform);
 }
 
@@ -1037,6 +1081,10 @@ video {
   grid-template-columns: repeat(11, minmax(0, 1fr));
 }
 
+.flex-col {
+  flex-direction: column;
+}
+
 .flex-wrap {
   flex-wrap: wrap;
 }
@@ -1063,6 +1111,10 @@ video {
 
 .gap-4 {
   gap: 1rem;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .gap-3 {
@@ -1234,6 +1286,10 @@ video {
   background-color: rgba(52, 211, 153, var(--tw-bg-opacity));
 }
 
+.object-contain {
+  object-fit: contain;
+}
+
 .p-0 {
   padding: 0px;
 }
@@ -1331,16 +1387,6 @@ video {
   padding-right: 2rem;
 }
 
-.py-\[500px\] {
-  padding-top: 500px;
-  padding-bottom: 500px;
-}
-
-.py-\[400px\] {
-  padding-top: 400px;
-  padding-bottom: 400px;
-}
-
 .py-\[300px\] {
   padding-top: 300px;
   padding-bottom: 300px;
@@ -1426,6 +1472,10 @@ video {
   padding-left: 0.5rem;
 }
 
+.pb-\[500px\] {
+  padding-bottom: 500px;
+}
+
 .pb-\[300px\] {
   padding-bottom: 300px;
 }
@@ -1438,20 +1488,16 @@ video {
   padding-bottom: 400px;
 }
 
-.pb-\[500px\] {
-  padding-bottom: 500px;
-}
-
-.pb-10 {
-  padding-bottom: 2.5rem;
+.pb-\[660px\] {
+  padding-bottom: 660px;
 }
 
 .pb-\[560px\] {
   padding-bottom: 560px;
 }
 
-.pb-\[660px\] {
-  padding-bottom: 660px;
+.pb-10 {
+  padding-bottom: 2.5rem;
 }
 
 .text-left {
@@ -1725,6 +1771,10 @@ video {
 .group:hover .group-hover\:scale-90 {
   --tw-scale-x: .9;
   --tw-scale-y: .9;
+  transform: var(--tw-transform);
+}
+
+.group:hover .group-hover\:transform {
   transform: var(--tw-transform);
 }
 

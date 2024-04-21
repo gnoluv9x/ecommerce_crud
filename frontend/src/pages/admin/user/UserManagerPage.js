@@ -1,17 +1,12 @@
-import React from "react";
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { ToastContainer } from "react-toastify";
-import { WarningMessage, SuccessMessage } from "../../../utils/util";
+import React, { useEffect } from "react";
+import Spin from "react-cssfx-loading/lib/Spin";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { User_list, User_remove } from "../../../slice/userSlice";
-import userApi from "../../../api/userApi";
-import Spin from "react-cssfx-loading/lib/Spin";
+import { SuccessMessage, WarningMessage } from "../../../utils/util";
 
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-
-import productApi from "../../../api/productApi";
 
 const UserManagerPage = () => {
   const dispatch = useDispatch();
@@ -43,7 +38,6 @@ const UserManagerPage = () => {
   };
   return (
     <>
-      <ToastContainer />
       <div className="pb-[500px]">
         {loading === false ? (
           <div className="pb-[500px]">

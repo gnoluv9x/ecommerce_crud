@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth";
 import userRouters from "./routes/user";
 import orderRouters from "./routes/order";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 //Config
 const app = express();
@@ -29,7 +30,8 @@ mongoose.connection.on("error", err => {
 
 //Middleware
 app.use(express.json());
-app.use(cors({ credentials: "same-origin" }));
+app.use(cors({ origin: "http://localhost:4001", credentials: true }));
+app.use(cookieParser());
 
 //Routes
 app.use("/api", productRoutes);

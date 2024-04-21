@@ -1,7 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import productApi from "../../api/productApi";
 
 import Categories from "../../components/client/Categories";
@@ -24,7 +22,6 @@ export default function SearchPage() {
 
   return (
     <>
-      <ToastContainer />
       <div className="content bg-gray-100 pb-8" id="content">
         <div className=" mx-auto grid grid-cols-4 gap-8 pt-5" style={{ width: "1200px" }}>
           <aside className="col-span-1 bg-gray-100">

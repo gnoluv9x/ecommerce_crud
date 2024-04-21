@@ -23,12 +23,8 @@ export const Product_create = createAsyncThunk("Product_create", async (product,
   }
 });
 export const Product_list = createAsyncThunk("Product_list", async thunkApi => {
-  try {
-    const { data } = await productApi.list();
-    return data;
-  } catch (error) {
-    return error;
-  }
+  const { data } = await productApi.list();
+  return data;
 });
 export const Product_remove = createAsyncThunk("Product_remove", async (product, thunkApi) => {
   try {

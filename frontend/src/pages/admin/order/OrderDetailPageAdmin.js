@@ -59,11 +59,11 @@ const OrderDetailPageAdmin = () => {
                     {order && order.status}
                     {order.status === "CHƯA DUYỆT" ? (
                       <span className="text-red-500 px-1">
-                        <i class="fas fa-times"></i>
+                        <i className="fas fa-times"></i>
                       </span>
                     ) : (
                       <span className="text-green-500 px-1">
-                        <i class="fas fa-check"></i>
+                        <i className="fas fa-check"></i>
                       </span>
                     )}
                   </span>
