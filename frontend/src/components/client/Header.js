@@ -24,6 +24,7 @@ const Header = () => {
     localStorage.removeItem("totalPrice");
     Cookie.remove("refreshToken");
     Cookie.remove("accessToken");
+    dispatchEvent(new Event("storage"));
   };
 
   useEffect(() => {

@@ -53,6 +53,7 @@ const CartPage = () => {
     localStorage.removeItem("cart");
     localStorage.removeItem("cartNumber");
     localStorage.removeItem("totalPrice");
+    dispatchEvent(new Event("storage"));
     navigate("/cart");
   };
 
@@ -84,6 +85,7 @@ const CartPage = () => {
       localStorage.removeItem("cart");
       localStorage.removeItem("cartNumber");
       localStorage.removeItem("totalPrice");
+      dispatchEvent(new Event("storage"));
       navigate("/order");
     }, 1500);
   };
@@ -124,12 +126,15 @@ const CartPage = () => {
       });
     }
 
-    const totalPrice = newCart.reduce(
-      (total, current) => (total += current.price * current.quantity),
-      0
-    );
+    let cartNumber = 0;
+    let totalPrice = 0;
 
-    localStorage.setItem("cartNumber", newCart.length);
+    newCart.forEach(cartItem => {
+      totalPrice += cartItem.quantity * cartItem.price;
+      cartNumber += cartItem.quantity;
+    });
+
+    localStorage.setItem("cartNumber", cartNumber);
     localStorage.setItem("totalPrice", totalPrice);
     localStorage.setItem("cart", JSON.stringify(newCart));
     dispatchEvent(new Event("storage"));
@@ -143,12 +148,17 @@ const CartPage = () => {
       localStorage.removeItem("cart");
       localStorage.removeItem("cartNumber");
       localStorage.removeItem("totalPrice");
+      dispatchEvent(new Event("storage"));
     } else {
-      const totalPrice = newCart.reduce(
-        (total, currentItem) => (total += currentItem.quantity * currentItem.price),
-        0
-      );
-      localStorage.setItem("cartNumber", newCart.length);
+      let cartNumber = 0;
+      let totalPrice = 0;
+
+      newCart.forEach(cartItem => {
+        totalPrice += cartItem.quantity * cartItem.price;
+        cartNumber += cartItem.quantity;
+      });
+
+      localStorage.setItem("cartNumber", cartNumber);
       localStorage.setItem("totalPrice", totalPrice);
       localStorage.setItem("cart", JSON.stringify(newCart));
       dispatchEvent(new Event("storage"));

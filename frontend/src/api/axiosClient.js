@@ -53,6 +53,7 @@ axiosClient.interceptors.response.use(
         localStorage.removeItem("cart");
         localStorage.removeItem("cartNumber");
         localStorage.removeItem("totalPrice");
+        dispatchEvent(new Event("storage"));
         Cookies.remove("refreshToken");
         Cookies.remove("accessToken");
         window.location.href = "/signin";

@@ -103,7 +103,7 @@ function SignInPage() {
         </div>
         <div className="text-center border-t border-gray-300 grid grid-cols-2">
           <div className="hover:bg-gray-300 py-2 border-r border-gray-300 ">
-            <button>
+            <button type="button">
               <Link to="/signup" className="font-semibold">
                 Đăng ký tài khoản
               </Link>
