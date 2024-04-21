@@ -1036,6 +1036,14 @@ video {
   width: 430px;
 }
 
+.w-\[600px\] {
+  width: 600px;
+}
+
+.max-w-\[600px\] {
+  max-width: 600px;
+}
+
 .flex-shrink-0 {
   flex-shrink: 0;
 }

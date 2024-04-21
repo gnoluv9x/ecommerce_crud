@@ -30,7 +30,7 @@ axiosClient.interceptors.response.use(
     return response;
   },
   async function (error) {
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === 401 && !window.location.href.includes("/signin")) {
       try {
         const { config } = error;
 

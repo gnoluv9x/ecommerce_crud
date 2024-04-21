@@ -12,6 +12,7 @@ function SignInPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,8 +29,7 @@ function SignInPage() {
         }
       })
       .catch(err => {
-        console.log("Debug_here err: ", err);
-        WarningMessage(err.response.data.error);
+        WarningMessage(err.response.data.message);
       });
   };
 
@@ -38,10 +38,7 @@ function SignInPage() {
   };
 
   return (
-    <div
-      className="container mx-auto bg-gray-200 border border-gray-300 mt-32 "
-      style={{ width: "600px" }}
-    >
+    <div className="container mx-auto bg-gray-200 border border-gray-300 mt-32 max-w-[600px]">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2 className="text-center pt-5 text-3xl font-semibold">ĐĂNG NHẬP</h2>
         <div className="ml-32 mt-5">
