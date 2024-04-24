@@ -1,27 +1,17 @@
+import dayjs from "dayjs";
+import Cookies from "js-cookie";
 import React, { useEffect } from "react";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { OrderByUser_remove, Order_listByUser } from "../../slice/orderSlice";
-import { SuccessMessage, WarningMessage, isAuthenticated, prices } from "../../utils/util";
-
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import productApi from "../../api/productApi";
-import { Product_update } from "../../slice/productSlice";
+import { SuccessMessage, prices } from "../../utils/util";
 
 const OrderPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = isAuthenticated();
-  console.log(user);
-  useEffect(() => {
-    dispatch(Order_listByUser(user._id));
-  }, [user._id]);
   const orders = useSelector(state => state.order.data.ordersByUser);
-  useEffect(() => {
-    dispatch(Order_listByUser(user._id));
-  }, []);
-  console.log("ordersByUser: ", orders);
 
   const confirmRemove = item => {
     confirmAlert({
@@ -31,15 +21,12 @@ const OrderPage = () => {
         {
           label: "Yes",
           onClick: () => {
-            item.cart.forEach(async ele => {
-              const { data } = await productApi.read(ele.id);
-              data.quantity += ele.quantity;
-              console.log(data);
-              dispatch(Product_update(data));
-            });
-            dispatch(OrderByUser_remove(item._id));
-            navigate("/order");
-            SuccessMessage("Huỷ đơn hàng thành công");
+            dispatch(OrderByUser_remove(item._id))
+              .unwrap()
+              .then(() => {
+                navigate("/order");
+                SuccessMessage("Huỷ đơn hàng thành công");
+              });
           },
         },
         {
@@ -49,6 +36,15 @@ const OrderPage = () => {
       ],
     });
   };
+
+  useEffect(() => {
+    const user = Cookies.get("accessToken");
+    if (!user) {
+      navigate("/signin");
+    } else {
+      dispatch(Order_listByUser(user._id));
+    }
+  }, []);
 
   return (
     <>
@@ -81,40 +77,69 @@ const OrderPage = () => {
                 <table className="table table-hover">
                   <thead>
                     <tr className="text-center">
-                      <th style={{ width: "50px" }}>STT</th>
-                      <th style={{ width: "300px" }}>Họ và tên</th>
-                      <th style={{ width: "175px" }}>Số điện thoại</th>
-                      <th style={{ width: "175px" }}>Tổng tiền</th>
-                      <th style={{ width: "170px" }}>Ngày đặt hàng</th>
-                      <th style={{ width: "200px" }}>Trạng thái</th>
-                      <th colSpan={2} style={{ width: "100px" }}>
-                        Tuỳ chọn
-                      </th>
+                      <th className="w-[5%]">STT</th>
+                      <th className="w-[20%]">Họ và tên</th>
+                      <th className="w-[10%]">Số điện thoại</th>
+                      <th className="w-[10%]">Tổng tiền</th>
+                      <th className="w-[20%]">Ngày đặt hàng</th>
+                      <th className="w-[10%]">Trạng thái</th>
+                      <th className="w-[15%]">Trạng thái thanh toán</th>
+                      <th className="w-[10%]">Tuỳ chọn</th>
                     </tr>
                   </thead>
                   <tbody>
                     {orders.map((item, index) => {
                       return (
                         <tr className="text-center" key={item._id}>
-                          <td>{index + 1}</td>
-                          <td>
+                          <td className="align-middle">{index + 1}</td>
+                          <td className="align-middle">
                             <span className="px-2">{item.name}</span>
                           </td>
-                          <td>
+                          <td className="align-middle">
                             <span>{item.phoneNumber}</span>
                           </td>
-                          <td>
+                          <td className="align-middle">
                             <span>{prices(item.totalPrice).replace("VND", "Đ")}</span>
                           </td>
-                          <td>
-                            <span>{item.createdAt.split("T")[0]}</span>
+                          <td className="align-middle">
+                            <span>
+                              {item.createdAt
+                                ? dayjs(item.createdAt).format("HH:mm:ss DD/MM/YYYY")
+                                : ""}
+                            </span>
                           </td>
-                          <td>
-                            <span>{item.status}</span>
+                          <td className="align-middle">
+                            <span>
+                              {item.status === "success"
+                                ? "Chờ duyệt"
+                                : item.status === "success"
+                                ? "Thành công"
+                                : "Huỷ"}
+                            </span>
                             <span className="checkStatus">
-                              {item.status === "CHƯA DUYỆT" ? (
-                                <span className="text-lg px-2 text-red-500">
-                                  <i className="fas fa-times-circle"></i>
+                              {item.status === "pending" ? (
+                                <span className="text-[#F29339] px-1">
+                                  <i className="far fa-clock"></i>
+                                </span>
+                              ) : item.status === "success" ? (
+                                <span className="text-lg text-green-500 px-1">
+                                  <i className="fas fa-check-circle"></i>
+                                </span>
+                              ) : (
+                                <span className="text-lg text-red-500 px-1">
+                                  <i className="fas fa-times"></i>
+                                </span>
+                              )}
+                            </span>
+                          </td>
+                          <td className="align-middle">
+                            <span>
+                              {item.checkoutStatus === "pending" ? "Chưa thanh toán" : "Thành công"}
+                            </span>
+                            <span className="checkStatus">
+                              {item.checkoutStatus === "pending" ? (
+                                <span className="text-[#F29339] px-1">
+                                  <i className="far fa-clock"></i>
                                 </span>
                               ) : (
                                 <span className="text-lg text-green-500 px-1">
@@ -123,32 +148,23 @@ const OrderPage = () => {
                               )}
                             </span>
                           </td>
-                          <td>
-                            <Link to={`/order/${item._id}`}>
-                              <button className="text-sm px-2 border border-gray-600 rounded-lg text-white btn btn-primary">
-                                <i className="fas fa-info-circle" />
-                              </button>
-                            </Link>
-                          </td>
-                          <td>
-                            <div>
-                              <button
-                                className="text-sm px-2 border border-gray-600 rounded-lg text-white btn btn-danger btn-remove"
-                                onClick={() => {
-                                  if (
-                                    item.status === "ĐÃ HOÀN THÀNH" ||
-                                    item.status === "ĐÃ DUYỆT"
-                                  ) {
-                                    WarningMessage(
-                                      "Không thể huỷ đơn hàng ĐÃ DUYỆT hoặc ĐÃ HOÀN THÀNH!"
-                                    );
-                                  } else {
+                          <td className="align-middle">
+                            <div className="flex justify-start gap-3">
+                              <Link to={`/order/${item._id}`}>
+                                <button className="text-sm px-2 border border-gray-600 rounded-lg text-white btn btn-primary">
+                                  <i className="fas fa-info-circle" />
+                                </button>
+                              </Link>
+                              {item.checkoutStatus !== "success" && item.status !== "success" && (
+                                <button
+                                  className="text-sm px-2 border border-gray-600 rounded-lg text-white btn btn-danger btn-remove"
+                                  onClick={() => {
                                     confirmRemove(item);
-                                  }
-                                }}
-                              >
-                                <i className="fas fa-trash-alt"></i>
-                              </button>
+                                  }}
+                                >
+                                  <i className="fas fa-trash-alt"></i>
+                                </button>
+                              )}
                             </div>
                           </td>
                         </tr>

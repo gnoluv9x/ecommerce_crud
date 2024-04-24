@@ -2,7 +2,7 @@ import Cookie from "js-cookie";
 import React, { useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { Link, useNavigate } from "react-router-dom";
-import { isAuthenticated } from "../../utils/util";
+import { getUserInfos } from "../../utils/util";
 
 const Header = () => {
   const [searchText, setSearchText] = useState("");
@@ -12,7 +12,7 @@ const Header = () => {
     navigate(`/search?name=${searchText}`);
   };
   const [cartNumber, setCartNumber] = useState(localStorage.getItem("cartNumber"));
-  const { user } = isAuthenticated();
+  const { user } = getUserInfos();
 
   const logout = () => {
     if (localStorage.getItem("user")) {

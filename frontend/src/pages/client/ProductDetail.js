@@ -7,9 +7,10 @@ import { SuccessMessage, addToCart, prices } from "../../utils/util";
 
 const ProductDetail = () => {
   const { id: idProduct } = useParams();
-  console.log(idProduct);
 
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState({});
+  const [productsRelated, setProductsRelated] = useState([]);
+
   useEffect(() => {
     const getProductById = async () => {
       const { data } = await productApi.read(idProduct);
@@ -18,8 +19,6 @@ const ProductDetail = () => {
     };
     getProductById();
   }, [idProduct]);
-
-  const [productsRelated, setProductsRelated] = useState([]);
 
   useEffect(() => {
     const getProductsRelated = async () => {
@@ -33,10 +32,10 @@ const ProductDetail = () => {
   return (
     <div>
       <div className="content bg-gray-100 pb-8 pt-5">
-        <div className=" mx-auto grid grid-cols-4 gap-5" style={{ width: "1200px" }}>
+        <div className=" mx-auto grid grid-cols-4 gap-5 w-[1200px]">
           <aside className="col-span-1 bg-gray-100">
-            <Categories></Categories>
-            <div className="mt-6">
+            {/* <Categories></Categories> */}
+            <div className="">
               <img
                 className="shadow-md transition duration-500 ease-in-out transform hover:scale-95"
                 src="https://laptopaz.vn/media/banner/23_Octce2f48fdc627f6f62b233347a2d4e707.jpg"
@@ -66,6 +65,9 @@ const ProductDetail = () => {
                   <span className="font-semibold">Số lượng trong kho: </span>
                   <span className="text-lg font-bold">{product && product.quantity}</span>
                 </p>
+                {product.quantity < 1 && (
+                  <div className="mt-1 text-sm font-semibold text-red-600">Hết hàng</div>
+                )}
                 <p className="text-sm mt-4">
                   <span className="text-base text-green-500">
                     <i className="fas fa-check-square" />
@@ -76,22 +78,28 @@ const ProductDetail = () => {
                   <span className="text-base text-green-500">
                     <i className="fas fa-check-square" />
                   </span>{" "}
-                  Mua hàng trước 15/01/2021 Giảm ngay 1.000.000 vnđ
+                  Mua hàng trước 15/01/2025 Giảm ngay 1.000.000 vnđ
                 </p>
-                <div className="mt-8">
-                  <div className="bg-red-500 rounded-lg text-center mt-3 w-[430px]">
-                    <button
-                      onClick={() => {
-                        addToCart(product._id, product.name, product.image, product.priceSale);
-                        SuccessMessage("Thêm sản phẩm vào giỏ hàng thành công!");
-                      }}
-                    >
-                      <p className="text-white font-bold text-lg pt-1">Thêm vào giỏ hàng</p>
-                      <p className="text-white font-semibold text-sm mt-1 pb-2">
-                        Giao tận nơi hoặc nhận ở cửa hàng
-                      </p>
-                    </button>
-                  </div>
+                <div className="mt-3">
+                  <button
+                    className={`bg-red-500 rounded-lg text-center w-[430px] disabled:bg-red-400 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-75`}
+                    disabled={product.quantity < 1}
+                    onClick={() => {
+                      addToCart(
+                        product._id,
+                        product.name,
+                        product.image,
+                        product.priceSale,
+                        product.quantity
+                      );
+                      SuccessMessage("Thêm sản phẩm vào giỏ hàng thành công!");
+                    }}
+                  >
+                    <p className="text-white font-bold text-lg pt-1">Thêm vào giỏ hàng</p>
+                    <p className="text-white font-semibold text-sm mt-1 pb-2">
+                      Giao tận nơi hoặc nhận ở cửa hàng
+                    </p>
+                  </button>
                   <div className="grid grid-cols-2 gap-2 mt-3" style={{ width: "430px" }}>
                     <div className="bg-blue-500 rounded-lg text-center ml-1 hover:bg-blue-900">
                       <Link to="/">

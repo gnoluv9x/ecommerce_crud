@@ -3,7 +3,6 @@ import Spin from "react-cssfx-loading/lib/Spin";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import orderApi from "../../../api/orderApi";
 import { Order_read, Order_update } from "../../../slice/orderSlice";
 import { SuccessMessage } from "../../../utils/util";
 
@@ -18,31 +17,30 @@ const OrderUpdatePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(Order_read(id));
-  }, [id]);
   const loading = useSelector(state => state.order.loading);
   const [order, setOrder] = useState();
-  useEffect(() => {
-    const getOrder = async () => {
-      const { data } = await orderApi.read(id);
-      setOrder(data);
-      reset(data);
-    };
-    getOrder();
-  }, [id]);
 
   const onSubmit = data => {
     const newStatus = {
       ...order,
       status: data.status,
     };
-    dispatch(Order_update(newStatus));
-    SuccessMessage("Cập nhật trạng thái thành công!");
-    setTimeout(() => {
-      navigate("/admin/orders");
-    }, 1000);
+    dispatch(Order_update(newStatus))
+      .unwrap()
+      .then(() => {
+        SuccessMessage("Cập nhật trạng thái thành công!");
+        navigate("/admin/orders");
+      });
   };
+
+  useEffect(() => {
+    dispatch(Order_read(id))
+      .unwrap()
+      .then(data => {
+        setOrder(data);
+        reset(data);
+      });
+  }, [id]);
 
   return (
     <>
@@ -60,9 +58,9 @@ const OrderUpdatePage = () => {
                   id="status"
                   style={{ width: "200px" }}
                 >
-                  <option value="CHƯA DUYỆT">CHƯA DUYỆT</option>
-                  <option value="ĐÃ DUYỆT">ĐÃ DUYỆT</option>
-                  <option value="ĐÃ HOÀN THÀNH">ĐÃ HOÀN THÀNH</option>
+                  <option value="pending">Chưa duyệt</option>
+                  <option value="success">Duyệt</option>
+                  {order?.checkoutStatus !== "success" && <option value="cancel">Huỷ</option>}
                 </select>
                 <p className="error text-red-500 text-sm font-semibold" />
                 <input

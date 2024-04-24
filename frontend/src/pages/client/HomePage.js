@@ -3,22 +3,27 @@ import productApi from "../../api/productApi";
 import Banner from "../../components/client/Banner";
 import Categories from "../../components/client/Categories";
 import ListProduct from "../../components/client/ListProduct";
+import { useDispatch } from "react-redux";
+import { Category_list } from "../../slice/categorySlice";
+import { Product_list } from "../../slice/productSlice";
+import { ErrorMessage } from "../../utils/util";
 
 export default function HomePage() {
-  // const dispatch = useDispatch();
-
-  // const productsByStore = useSelector((state) => {
-  //     return state.product.data.products
-  // })
+  const dispatch = useDispatch();
 
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const getProducts = async () => {
-      const { data } = await productApi.list();
-      setProducts(data);
-    };
-    getProducts();
+    dispatch(Category_list());
+    dispatch(Product_list())
+      .unwrap()
+      .then(data => {
+        setProducts(data);
+      })
+      .catch(err => {
+        console.log("Debug_here err: ", err);
+        ErrorMessage("Không  nhận được danh sách sản phẩm");
+      });
   }, []);
 
   const handleSort = e => {
@@ -34,7 +39,6 @@ export default function HomePage() {
     let [priceMin, priceMax] = e.target.value.split("-");
     const filterProducts = async () => {
       const { data } = await productApi.filterPrice(priceMin, priceMax);
-      console.log(data);
       setProducts(data);
     };
     filterProducts();

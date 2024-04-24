@@ -17,25 +17,25 @@ import { userById } from "../controllers/user";
 
 const router = express.Router();
 //Tìm kiếm sản phẩm
-router.get("/products/search", search);
+router.get("/search", search);
 //Lọc theo giá
-router.get("/products/filterPrice", filterPrice);
+router.get("/filterPrice", filterPrice);
 //Sắp xếp theo giá
-router.get("/products/sortPrice", sortPrice);
+router.get("/sortPrice", sortPrice);
 //Danh sách sản phẩm
-router.get("/products", list);
+router.get("", list);
 //Danh sách sản phẩm theo danh mục
-router.get("/products/categories/:categoryId", productByCategory);
+router.get("/categories/:categoryId", productByCategory);
 //Sản phẩm liên quan
-router.get("/products/related/:productId", relateProduct);
+router.get("/related/:productId", relateProduct);
 //Chi tiết sản phẩm
-router.get("/products/:productId", read);
+router.get("/:productId", read);
 //Thêm mới sản phẩm
-router.post("/products", create);
+router.post("", create);
 //Cập nhật sản phẩm
-router.put("/products/:productId", update);
+router.put("/:productId", update);
 //Xoá sản phẩm
-router.delete("/products/:productId", remove);
+router.delete("/:productId", remove);
 
 //Lấy param
 router.param("categoryId", categoryById);

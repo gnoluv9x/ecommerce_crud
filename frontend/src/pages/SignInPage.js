@@ -1,10 +1,11 @@
 import { unwrapResult } from "@reduxjs/toolkit";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { SignIn } from "../slice/authSlice";
 import { SuccessMessage, WarningMessage } from "../utils/util";
+import Cookies from "js-cookie";
 
 function SignInPage() {
   const {
@@ -36,6 +37,13 @@ function SignInPage() {
   const handleForgotPassword = event => {
     event.stopPropagation();
   };
+
+  useEffect(() => {
+    const user = Cookies.get("accessToken");
+    if (user) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="container mx-auto bg-gray-200 border border-gray-300 mt-32 max-w-[600px]">

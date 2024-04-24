@@ -34,11 +34,12 @@ const UserUpdate = () => {
 
   const onSubmit = data => {
     console.log(data);
-    dispatch(User_update(data));
-    SuccessMessage("Cập nhật người dùng thành công!");
-    setTimeout(() => {
-      navigate("/admin/users");
-    }, 1500);
+    dispatch(User_update(data))
+      .unwrap()
+      .then(() => {
+        SuccessMessage("Cập nhật người dùng thành công!");
+        navigate("/admin/users");
+      });
   };
   return (
     <>

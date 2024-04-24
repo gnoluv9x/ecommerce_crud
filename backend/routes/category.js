@@ -13,17 +13,17 @@ import { userById } from "../controllers/user";
 const router = express.Router();
 
 //Danh sách danh mục
-router.get("/categories", list);
+router.get("", list);
 //Chi tiết danh mục
-router.get("/categories/:categoryId", read);
+router.get("/:categoryId", read);
 //Thêm mới danh mục
-router.post("/categories", create);
+router.post("", create);
 //Cập nhật danh mục
-router.put("/categories/:categoryId", update);
+router.put("/:categoryId", update);
 //Xoá danh mục
-router.delete("/categories/:categoryId", remove);
+router.delete("/:categoryId", remove);
 //List Danh mục( ngoại trừ Danh mục hiện tại)
-router.get("/categories/related/:categoryId", listRelated);
+router.get("/related/:categoryId", listRelated);
 //Lấy param
 router.param("categoryId", categoryById);
 router.param("userId", userById);

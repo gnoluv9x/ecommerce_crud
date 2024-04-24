@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import "./App.css";
 
@@ -35,8 +34,6 @@ import UserUpdatePage from "./pages/admin/user/UserUpdatePage";
 import PrivateRoute from "./utils/privateRoute";
 
 import "react-toastify/dist/ReactToastify.css";
-import { Category_list } from "./slice/categorySlice";
-import { Product_list } from "./slice/productSlice";
 import { ScrollToTopRouter } from "./hooks/scrollToTop";
 
 export default function App() {
@@ -128,13 +125,6 @@ function LayoutAdmin() {
   );
 }
 function LayoutWebsite() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(Category_list());
-    dispatch(Product_list());
-  }, []);
-
   return (
     <>
       <Header />

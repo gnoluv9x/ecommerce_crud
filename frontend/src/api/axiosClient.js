@@ -34,7 +34,7 @@ axiosClient.interceptors.response.use(
       try {
         const { config } = error;
 
-        const refreshResp = await axiosClient.post("/refreshToken");
+        const refreshResp = await axiosClient.post("/auth/refreshToken");
 
         if (refreshResp.data?.accessToken) {
           const user = JSON.parse(localStorage.getItem("user"));

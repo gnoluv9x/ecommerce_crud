@@ -1,21 +1,35 @@
 import express from "express";
-import { create, list, orderById, orderByUser, read, remove, update } from "../controllers/order";
+import {
+  create,
+  list,
+  orderById,
+  orderByUser,
+  read,
+  remove,
+  update,
+  getOrderDaysSummary,
+  getOrderDaysOfMonth,
+} from "../controllers/order";
 import { userById } from "../controllers/user";
 
 const router = express.Router();
 
 //Danh sách đơn hàng
-router.get("/orders", list);
+router.get("", list);
 //Danh sách đơn hàng theo user
-router.get("/orders/users/:userId", orderByUser);
+router.get("/users/:userId", orderByUser);
 //Thêm đơn hàng
-router.post("/orders", create);
+router.post("", create);
+// Tổng quát
+router.get("/summary-days", getOrderDaysSummary);
+// Chi tiết từng ngày trong tháng
+router.get("/report-days", getOrderDaysOfMonth);
 //Chi tiêt đơn hàng
-router.get("/orders/:orderId", read);
+router.get("/:orderId", read);
 //Xoá đơn hàng
-router.delete("/orders/:orderId", remove);
+router.delete("/:orderId", remove);
 //Cập nhật trạng thái đơn hàng
-router.put("/orders/:orderId", update);
+router.put("/:orderId", update);
 //Lấy param
 router.param("orderId", orderById);
 router.param("userId", userById);

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import orderApi from "../api/orderApi";
 
 //initialState
@@ -16,7 +16,6 @@ const initialState = {
 export const Order_create = createAsyncThunk("Order_create", async (order, thunkApi) => {
   try {
     const { data } = await orderApi.add(order);
-    console.log(data);
     return data;
   } catch (error) {
     return thunkApi.rejectWithValue(error);
@@ -126,8 +125,7 @@ const orderSlice = createSlice({
     });
     builder.addCase(Order_remove.fulfilled, (state, action) => {
       state.loading = false;
-      console.log(action);
-      let index = state.data.orders.findIndex(item => item._id === action.payload.data._id);
+      let index = state.data.orders.findIndex(item => item._id === action.payload.deletedOrder._id);
       state.data.orders.splice(index, 1);
     });
 

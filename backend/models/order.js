@@ -40,6 +40,13 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
     },
+    checkoutStatus: {
+      type: String, // pending | success
+      required: true,
+    },
+    paymentMethod: {
+      type: String, // pending | success
+    },
   },
   { timestamps: true }
 );

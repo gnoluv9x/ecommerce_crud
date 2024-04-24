@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 export const prices = x => {
   return (x = x.toLocaleString("it-IT", {
@@ -7,14 +8,23 @@ export const prices = x => {
   }));
 };
 
-export const ErrorMessage = error => toast.error(error, { autoClose: 500 });
-export const SuccessMessage = success => toast.success(success, { autoClose: 500 });
-export const WarningMessage = warning => toast.warning(warning, { autoClose: 500 });
+export const ErrorMessage = (error, duration = 500) => toast.error(error, { autoClose: duration });
+export const SuccessMessage = (success, duration = 500) =>
+  toast.success(success, { autoClose: duration });
+export const WarningMessage = (warning, duration = 500) =>
+  toast.warning(warning, { autoClose: duration });
 
 export const isAuthenticated = () => {
   if (typeof window == "undefined") {
     return false;
   }
+
+  const user = Cookies.get("accessToken");
+
+  return !!user;
+};
+
+export const getUserInfos = () => {
   if (localStorage.getItem("user")) {
     return JSON.parse(localStorage.getItem("user"));
   } else {
@@ -30,9 +40,10 @@ export const arraySort = (arr, index) => {
   return newArr;
 };
 
-export const addToCart = (id, name, image, price) => {
+export const addToCart = (id, name, image, price, quantity) => {
   let cartStorage = localStorage.getItem("cart");
   let screenCart = null;
+
   if (!cartStorage) {
     screenCart = [];
   } else {
@@ -44,6 +55,7 @@ export const addToCart = (id, name, image, price) => {
     name: name,
     image: image,
     price: price,
+    stock: quantity,
   };
 
   let existed = screenCart.findIndex(ele => ele.id === item.id);

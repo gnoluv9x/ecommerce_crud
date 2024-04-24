@@ -51,19 +51,21 @@ const ProductUpdatePage = () => {
       uploadBytes(storageRef, img).then(() => {
         getDownloadURL(UploadTask.snapshot.ref).then(url => {
           data.image = url;
-          dispatch(Product_update(data));
-          SuccessMessage("Thêm sản phẩm thành công!");
-          setTimeout(() => {
-            navigate("/admin/products");
-          }, 1500);
+          dispatch(Product_update(data))
+            .unwrap()
+            .then(() => {
+              SuccessMessage("Thêm sản phẩm thành công!");
+              navigate("/admin/products");
+            });
         });
       });
     } else {
-      dispatch(Product_update(data));
-      SuccessMessage("Cập nhật sản phẩm thành công!");
-      setTimeout(() => {
-        navigate("/admin/products");
-      }, 1500);
+      dispatch(Product_update(data))
+        .unwrap()
+        .then(() => {
+          SuccessMessage("Cập nhật sản phẩm thành công!");
+          navigate("/admin/products");
+        });
     }
   };
   return (

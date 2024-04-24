@@ -3,7 +3,7 @@ import Spin from "react-cssfx-loading/lib/Spin";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Order_list, Order_remove } from "../../../slice/orderSlice";
-import { SuccessMessage, WarningMessage, prices } from "../../../utils/util";
+import { ErrorMessage, SuccessMessage, prices } from "../../../utils/util";
 
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
@@ -15,9 +15,9 @@ const OrderManager = () => {
   useEffect(() => {
     dispatch(Order_list());
   }, []);
+
   const orders = useSelector(state => state.order.data.orders);
   const loading = useSelector(state => state.order.loading);
-  console.log("orders: ", orders);
 
   const confirmRemove = id => {
     confirmAlert({
@@ -27,9 +27,17 @@ const OrderManager = () => {
         {
           label: "Yes",
           onClick: () => {
-            dispatch(Order_remove(id));
-            SuccessMessage("Xoá thành công!");
-            navigate("/admin/orders");
+            dispatch(Order_remove(id))
+              .unwrap()
+              .then(resp => {
+                console.log("Debug_here resp: ", resp);
+                SuccessMessage("Xoá thành công!");
+                // dispatch(Order_list());
+              })
+              .catch(err => {
+                console.log("Debug_here err: ", err);
+                ErrorMessage("Không thể xoá đơn hàng");
+              });
           },
         },
         {
@@ -62,13 +70,14 @@ const OrderManager = () => {
                     <table className="table table-hover">
                       <thead>
                         <tr className="text-center">
-                          <th style={{ width: "50px" }}>STT</th>
-                          <th style={{ width: "300px" }}>Họ và tên</th>
-                          <th style={{ width: "175px" }}>Số điện thoại</th>
-                          <th style={{ width: "175px" }}>Tổng tiền</th>
-                          <th style={{ width: "170px" }}>Ngày đặt hàng</th>
-                          <th style={{ width: "200px" }}>Trạng thái</th>
-                          <th colSpan={2} style={{ width: "100px" }}>
+                          <th className="w-[5%]">STT</th>
+                          <th className="w-[10%]">Họ và tên</th>
+                          <th className="w-[10%]">Số điện thoại</th>
+                          <th className="w-[10%]">Tổng tiền</th>
+                          <th className="w-[10%]">Ngày đặt hàng</th>
+                          <th className="w-[10%]">Trạng thái</th>
+                          <th className="w-[12%]">Trạng thái TT</th>
+                          <th colSpan={2} className="w-[5%]">
                             Tuỳ chọn
                           </th>
                         </tr>
@@ -91,15 +100,25 @@ const OrderManager = () => {
                                 <span>{item.createdAt.split("T")[0]}</span>
                               </td>
                               <td>
-                                <span>{item.status}</span>
+                                <span>
+                                  {item.status === "success"
+                                    ? "Thành công"
+                                    : item.status === "pending"
+                                    ? "Chờ duyệt"
+                                    : "Huỷ"}
+                                </span>
                                 <span className="checkStatus">
-                                  {item.status === "ĐÃ HOÀN THÀNH" ? (
+                                  {item.status === "success" ? (
                                     <span className="text-green-600 px-1 text-lg">
                                       <i className="fas fa-check-circle"></i>
                                     </span>
+                                  ) : item.status === "cancel" ? (
+                                    <span className="text-red-400 px-1 text-lg">
+                                      <i className="fas fa-times"></i>
+                                    </span>
                                   ) : (
                                     <Link to={`/admin/orders/update/${item._id}`}>
-                                      <span className="text-lg px-1">
+                                      <span className="text-lg px-1 ml-1 text-blue-400">
                                         <i className="fas fa-edit"></i>
                                       </span>
                                     </Link>
@@ -107,31 +126,47 @@ const OrderManager = () => {
                                 </span>
                               </td>
                               <td>
-                                <Link to={`/admin/orders/${item._id}`}>
-                                  <button className="text-sm px-2 border border-gray-600 rounded-lg text-white btn btn-primary">
-                                    <i className="fas fa-info-circle" />
-                                  </button>
-                                </Link>
+                                {item.checkoutStatus === "success" ? (
+                                  <div className="">
+                                    Đã thanh toán{" "}
+                                    <span className="text-green-500 ml-1">
+                                      <i className="fas fa-check-circle"></i>
+                                    </span>
+                                  </div>
+                                ) : item.checkoutStatus === "pending" ? (
+                                  <div className="">
+                                    Chưa thanh toán
+                                    <span className="text-yellow-500 ml-1">
+                                      <i className="far fa-clock"></i>
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div className="">
+                                    Thât bại{" "}
+                                    <span className="text-red-500 ml-1">
+                                      <i class="fas fa-ban"></i>
+                                    </span>
+                                  </div>
+                                )}
                               </td>
                               <td>
-                                <div>
-                                  <button
-                                    className="text-sm px-2 border border-gray-600 rounded-lg text-white btn btn-danger btn-remove"
-                                    onClick={() => {
-                                      if (
-                                        item.status === "ĐÃ HOÀN THÀNH" ||
-                                        item.status === "ĐÃ DUYỆT"
-                                      ) {
-                                        WarningMessage(
-                                          "Không thể xoá đơn hàng ĐÃ DUYỆT hoặc ĐÃ HOÀN THÀNH!"
-                                        );
-                                      } else {
-                                        confirmRemove(item._id);
-                                      }
-                                    }}
-                                  >
-                                    <i className="fas fa-trash-alt"></i>
-                                  </button>
+                                <div className="flex justify-between">
+                                  <Link to={`/admin/orders/${item._id}`}>
+                                    <button className="text-sm px-2 border border-gray-600 rounded-lg text-white btn btn-primary">
+                                      <i className="fas fa-info-circle" />
+                                    </button>
+                                  </Link>
+                                  {item.status === "pending" &&
+                                    item.checkoutStatus !== "success" && (
+                                      <button
+                                        className="text-sm px-2 border border-gray-600 rounded-lg text-white btn btn-danger btn-remove"
+                                        onClick={() => {
+                                          confirmRemove(item._id);
+                                        }}
+                                      >
+                                        <i className="fas fa-trash-alt"></i>
+                                      </button>
+                                    )}
                                 </div>
                               </td>
                             </tr>

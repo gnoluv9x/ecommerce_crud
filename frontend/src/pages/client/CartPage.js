@@ -2,21 +2,23 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import productApi from "../../api/productApi";
+import { Checkout_create } from "../../slice/checkoutSlice";
 import { Order_create } from "../../slice/orderSlice";
-import { Product_update } from "../../slice/productSlice";
 import {
+  ErrorMessage,
   SuccessMessage,
   WarningMessage,
   getCurrentDate,
-  isAuthenticated,
+  getUserInfos,
   prices,
 } from "../../utils/util";
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = isAuthenticated();
+
+  const { user } = getUserInfos();
+  const [toggleOrder, setToggleOrder] = useState(false);
 
   const {
     register,
@@ -28,25 +30,17 @@ const CartPage = () => {
       email: user?.email || "",
     },
   });
+
   let productOnCart = JSON.parse(localStorage.getItem("cart"));
   let cartNumber = localStorage.getItem("cartNumber");
   let totalPrice = localStorage.getItem("totalPrice");
 
   const alertLogin = () => {
-    // WarningMessage("Hãy đăng nhập để đặt hàng!");
     navigate("/signin");
   };
-  const [toggleOrder, setToggleOrder] = useState(false);
-  // useEffect(() => {
-  //     const toggle = () => {
-  //         setToggleOrder(!toggleOrder)
-  //     }
-  // }, [])
+
   const toggle = () => {
     setToggleOrder(!toggleOrder);
-  };
-  const order = () => {
-    toggle();
   };
 
   const removeCart = () => {
@@ -65,29 +59,58 @@ const CartPage = () => {
       phoneNumber: data.phoneNumber,
       email: data.email,
       note: data.note,
+      paymentMethod: data.paymentMethod,
       cart: productOnCart,
       cartNumber: cartNumber,
       totalPrice: totalPrice,
       create_at: getCurrentDate(),
-      status: "CHƯA DUYỆT",
+      status: "pending",
+      checkoutStatus: data.paymentMethod === "cod" ? "success" : "pending",
     };
 
-    dispatch(Order_create(order));
-    productOnCart.forEach(async item => {
-      console.log(item.id, item.quantity);
-      const { data } = await productApi.read(item.id);
-      data.quantity -= item.quantity;
-      console.log(data);
-      dispatch(Product_update(data));
-    });
-    SuccessMessage("Đặt hàng thành công!");
-    setTimeout(() => {
-      localStorage.removeItem("cart");
-      localStorage.removeItem("cartNumber");
-      localStorage.removeItem("totalPrice");
-      dispatchEvent(new Event("storage"));
-      navigate("/order");
-    }, 1500);
+    dispatch(Order_create(order))
+      .unwrap()
+      .then(result => {
+        if (result.paymentMethod === "cod") {
+          SuccessMessage("Đặt hàng thành công!", 2000);
+
+          localStorage.removeItem("cart");
+          localStorage.removeItem("cartNumber");
+          localStorage.removeItem("totalPrice");
+          dispatchEvent(new Event("storage"));
+
+          navigate("/order");
+        } else {
+          dispatch(
+            Checkout_create({
+              language: "vn",
+              amount: result.totalPrice,
+              bankCode: result.paymentMethod,
+              orderId: result._id,
+            })
+          )
+            .unwrap()
+            .then(resp => {
+              if (resp.status) {
+                localStorage.removeItem("cart");
+                localStorage.removeItem("cartNumber");
+                localStorage.removeItem("totalPrice");
+                dispatchEvent(new Event("storage"));
+
+                window.location.href = resp.data;
+              } else {
+                throw new Error("Thanh toán thất bại");
+              }
+            })
+            .catch(err => {
+              throw err?.message || err;
+            });
+        }
+      })
+      .catch(err => {
+        console.log("Debug_here err: ", err);
+        ErrorMessage("Tạo đơn hàng thất bại");
+      });
   };
 
   const handleChangeQuantity = (type, itemId) => {
@@ -236,8 +259,9 @@ const CartPage = () => {
                                 </button>
                                 <span>{item.quantity}</span>
                                 <button
-                                  className="text-sm border border-gray-600 rounded-lg px-2 text-white btn_plus cursor-pointer bg-blue-500"
+                                  className="text-sm border border-gray-600 rounded-lg px-2 text-white btn_plus cursor-pointer bg-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
                                   onClick={() => handleChangeQuantity("asc", item.id)}
+                                  disabled={item.quantity === item.stock}
                                 >
                                   +
                                 </button>
@@ -284,7 +308,7 @@ const CartPage = () => {
                     </Link>
                     {user ? (
                       <div>
-                        <button onClick={order} id="btn_order" className="btn btn-primary">
+                        <button onClick={toggle} id="btn_order" className="btn btn-primary">
                           Đặt hàng
                         </button>
                       </div>
@@ -426,28 +450,47 @@ const CartPage = () => {
                           </h3>
                         </div>
                         <div className="p-3 border">
-                          <div className="text-white">
-                            <input name="checkPay" type="radio" disabled /> Thanh toán tại cửa hàng
+                          <div className="mt-1 flex gap-1 items-center cursor-pointer">
+                            <input
+                              type="radio"
+                              id="vnpay"
+                              value=""
+                              defaultChecked
+                              {...register("paymentMethod", { required: true })}
+                            />
+                            <label className="cursor-pointer" for="vnpay">
+                              Cổng thanh toán VNPAYQR
+                            </label>
                           </div>
-                          <div className="mt-1">
-                            <input name="checkPay" type="radio" defaultChecked /> Thanh toán khi
-                            nhận hàng (COD)
+                          <div className="mt-1 flex gap-1 items-center cursor-pointer">
+                            <input
+                              type="radio"
+                              id="atm"
+                              value="VNBANK"
+                              {...register("paymentMethod", { required: true })}
+                            />
+                            <label className="cursor-pointer" for="atm">
+                              Thanh toán qua ATM-Tài khoản ngân hàng nội địa
+                            </label>
                           </div>
-                          <div className="mt-1">
-                            <input name="checkPay" type="radio" id="radio3" disabled /> Thanh toán
-                            trực tuyến bằng thẻ ATM, IB, QR Code{" "}
-                          </div>
-                          <div className="mt-1">
-                            <input name="checkPay" type="radio" id="radio4" disabled /> Thanh toán
-                            trả góp online
+                          <div className="mt-1 flex gap-1 items-center cursor-pointer">
+                            <input
+                              type="radio"
+                              id="cod"
+                              value="cod"
+                              {...register("paymentMethod", { required: true })}
+                            />
+                            <label className="cursor-pointer" for="cod">
+                              Thanh toán khi nhận hàng (COD)
+                            </label>
                           </div>
                         </div>
                       </div>
                       <div className="text-center mt-3">
                         <input
                           type="submit"
-                          className="btn btn-primary py-2"
-                          value="GỬI ĐƠN HÀNG"
+                          className="btn btn-primary py-2 uppercase"
+                          value="Tạo đơn"
                         />
                       </div>
                     </div>

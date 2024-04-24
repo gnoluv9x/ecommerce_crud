@@ -2,11 +2,11 @@ import { axiosClient } from "./axiosClient";
 
 const authApi = {
   signup(user) {
-    const url = "/signup";
+    const url = "/auth/signup";
     return axiosClient.post(url, user);
   },
   signin(user) {
-    const url = "/signin";
+    const url = "/auth/signin";
     return axiosClient.post(url, user);
   },
   // signout(){

@@ -24,11 +24,12 @@ function CategoryAddPage() {
       }
     });
     if (check === 0) {
-      dispatch(Category_create(data));
-      toast.success("Thêm danh mục thành công!");
-      setTimeout(() => {
-        navigate("/admin/categories");
-      }, 2000);
+      dispatch(Category_create(data))
+        .unwrap()
+        .then(() => {
+          toast.success("Thêm danh mục thành công!");
+          navigate("/admin/categories");
+        });
     } else {
       toast.warning("Tên danh mục đã tồn tại!");
     }

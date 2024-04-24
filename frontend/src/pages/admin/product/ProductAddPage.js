@@ -37,11 +37,12 @@ const ProductAddPage = () => {
         getDownloadURL(UploadTask.snapshot.ref).then(url => {
           data.image = url;
           console.log(data);
-          dispatch(Product_create(data));
-          SuccessMessage("Thêm sản phẩm thành công!");
-          setTimeout(() => {
-            navigate("/admin/products");
-          }, 1500);
+          dispatch(Product_create(data))
+            .unwrap()
+            .then(() => {
+              SuccessMessage("Thêm sản phẩm thành công!");
+              navigate("/admin/products");
+            });
         });
       })
       .catch(err => {
