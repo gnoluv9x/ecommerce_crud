@@ -28,7 +28,6 @@ const OrderManager = () => {
             dispatch(Order_remove(id))
               .unwrap()
               .then(resp => {
-                console.log("Debug_here resp: ", resp);
                 SuccessMessage("Xoá thành công!");
                 // dispatch(Order_list());
               })

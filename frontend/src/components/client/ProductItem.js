@@ -30,8 +30,8 @@ const ProductItem = ({ product }) => {
             {prices(Number(product.price)).replace("VND", "₫")}
           </span>
         </p>
-        {!isSoldOut && (
-          <div className="transition duration-300 ease-in-out transform translate-y-44 group-hover:-translate-y-0">
+        <div className="transition duration-300 ease-in-out transform translate-y-44 group-hover:-translate-y-0 min-h-[44px]">
+          {!isSoldOut && (
             <button
               data-id={product._id}
               className="bg-blue-500 text-white text-base font-bold rounded-md btn_addCart mb-2 hover:bg-blue-700"
@@ -56,8 +56,8 @@ const ProductItem = ({ product }) => {
             >
               THÊM GIỎ HÀNG
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

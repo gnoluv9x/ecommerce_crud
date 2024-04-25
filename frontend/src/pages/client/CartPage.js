@@ -79,7 +79,7 @@ const CartPage = () => {
           localStorage.removeItem("totalPrice");
           dispatchEvent(new Event("storage"));
 
-          navigate("/order");
+          navigate(`/order/${result._id}`);
         } else {
           dispatch(
             Checkout_create({

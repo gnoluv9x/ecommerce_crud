@@ -39,7 +39,7 @@ const DashboardReport = () => {
         <OrderRate />
       </div>
 
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 mb-40">
         <div className="col-span-1">
           <OrdersBarChart />
         </div>

@@ -22,7 +22,7 @@ const options = {
     },
     title: {
       display: true,
-      text: "Đơn hàng theo tháng",
+      text: "Giá trị đơn hàng theo tháng",
     },
   },
   scales: {
