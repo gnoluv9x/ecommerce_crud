@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
-import Spin from "react-cssfx-loading/lib/Spin";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Spinner from "../../../components/admin/Spinner";
 import { Order_list, Order_remove } from "../../../slice/orderSlice";
 import { ErrorMessage, SuccessMessage, prices } from "../../../utils/util";
 
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-
 const OrderManager = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,9 +48,9 @@ const OrderManager = () => {
 
   return (
     <>
-      <div className="pb-[500px]">
+      <div className="h-100">
         {loading === false ? (
-          <div className="pb-[400px]">
+          <div>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <h1 className="h2 ml-5 mt-2">QUẢN TRỊ SẢN PHẨM</h1>
             </div>
@@ -86,20 +84,20 @@ const OrderManager = () => {
                         {orders.map((item, index) => {
                           return (
                             <tr className="text-center" key={item._id}>
-                              <td>{index + 1}</td>
-                              <td>
+                              <td className="align-middle">{index + 1}</td>
+                              <td className="align-middle">
                                 <span className="px-2">{item.name}</span>
                               </td>
-                              <td>
+                              <td className="align-middle">
                                 <span>{item.phoneNumber}</span>
                               </td>
-                              <td>
-                                <span>{prices(item.totalPrice).replace("VND", "Đ")}</span>
+                              <td className="align-middle">
+                                <span>{prices(item.totalPrice).replace("VND", "₫")}</span>
                               </td>
-                              <td>
+                              <td className="align-middle">
                                 <span>{item.createdAt.split("T")[0]}</span>
                               </td>
-                              <td>
+                              <td className="align-middle">
                                 <span>
                                   {item.status === "success"
                                     ? "Thành công"
@@ -125,7 +123,7 @@ const OrderManager = () => {
                                   )}
                                 </span>
                               </td>
-                              <td>
+                              <td className="align-middle">
                                 {item.checkoutStatus === "success" ? (
                                   <div className="">
                                     Đã thanh toán{" "}
@@ -149,7 +147,7 @@ const OrderManager = () => {
                                   </div>
                                 )}
                               </td>
-                              <td>
+                              <td className="align-middle">
                                 <div className="flex justify-between">
                                   <Link to={`/admin/orders/${item._id}`}>
                                     <button className="text-sm px-2 border border-gray-600 rounded-lg text-white btn btn-primary">
@@ -180,9 +178,7 @@ const OrderManager = () => {
             </div>
           </div>
         ) : (
-          <div className="py-[300px]">
-            <Spin className="mx-auto" color="#0d6efd" width="30px" height="30px" />
-          </div>
+          <Spinner />
         )}
       </div>
     </>

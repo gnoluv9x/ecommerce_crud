@@ -245,7 +245,7 @@ const CartPage = () => {
                             </td>
                             <td className="border border-gray-300">
                               <span className="cart_price_show">
-                                {prices(Number(item.price)).replace("VND", "Đ")}
+                                {prices(Number(item.price)).replace("VND", "₫")}
                               </span>
                               <span className="cart_price hidden">{Number(item.price)}</span>
                             </td>
@@ -271,7 +271,7 @@ const CartPage = () => {
                               <span className="cart_cost_show font-semibold">
                                 {prices(Number(item.price) * Number(item.quantity)).replace(
                                   "VND",
-                                  "Đ"
+                                  "₫"
                                 )}
                               </span>
                               <span className="cart_cost hidden ">
@@ -296,7 +296,7 @@ const CartPage = () => {
                         <td colSpan={4} className="border border-gray-400">
                           <p className="text-red-500 font-bold my-3 ml-3 text-lg text-right pr-[100px] uppercase">
                             Tổng tiền: <span id="totalCost" />
-                            {prices(Number(totalPrice)).replace("VND", "Đ")}
+                            {prices(Number(totalPrice)).replace("VND", "₫")}
                           </p>
                         </td>
                       </tr>

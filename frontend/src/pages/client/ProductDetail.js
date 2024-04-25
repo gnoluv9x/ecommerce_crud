@@ -52,10 +52,10 @@ const ProductDetail = () => {
               </div>
               <div className="col-span-6 mt-4">
                 <span className="text-red-500 text-3xl font-bold">
-                  {prices(Number(product && product.priceSale)).replace("VND", "Đ")}
+                  {prices(Number(product && product.priceSale)).replace("VND", "₫")}
                 </span>{" "}
                 <span className="text-lg text-gray-500 font-bold  ml-3 italic line-through">
-                  {prices(Number(product && product.price)).replace("VND", "Đ")}
+                  {prices(Number(product && product.price)).replace("VND", "₫")}
                 </span>
                 <p className="text-sm mt-2">
                   <span className="font-semibold">Bảo hành: </span>

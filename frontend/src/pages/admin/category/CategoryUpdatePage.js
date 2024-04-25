@@ -1,12 +1,11 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import categoryApi from "../../../api/categoryApi";
+import Spinner from "../../../components/admin/Spinner";
 import { Category_update } from "../../../slice/categorySlice";
-import Spin from "react-cssfx-loading/lib/Spin";
 
 const CategoryUpdatePage = () => {
   const {
@@ -56,9 +55,9 @@ const CategoryUpdatePage = () => {
 
   return (
     <>
-      <div className="pb-[500px]">
+      <div className="h-100">
         {loading === false ? (
-          <div className="content-wrapper pb-[360px] overflow-hidden">
+          <div className="content-wrapper overflow-hidden">
             <div className="container mx-auto pt-5 text-center">
               <h3 className="text-center font-bold pb-4 text-xl">CẬP NHẬT DANH MỤC</h3>
               <form className="text-center" onSubmit={handleSubmit(onSubmit)}>
@@ -94,9 +93,7 @@ const CategoryUpdatePage = () => {
             </div>
           </div>
         ) : (
-          <div className="py-[300px]">
-            <Spin className="mx-auto" color="#0d6efd" width="30px" height="30px" />
-          </div>
+          <Spinner />
         )}
       </div>
     </>

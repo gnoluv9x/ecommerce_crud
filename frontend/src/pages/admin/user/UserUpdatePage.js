@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Spin from "react-cssfx-loading/lib/Spin";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import userApi from "../../../api/userApi";
+import Spinner from "../../../components/admin/Spinner";
 import { User_read, User_update } from "../../../slice/userSlice";
 import { SuccessMessage } from "../../../utils/util";
 
@@ -17,12 +17,9 @@ const UserUpdate = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    dispatch(User_read(id));
-  }, [id]);
-  const userCurrent = useSelector(state => state.user.data.user);
   const loading = useSelector(state => state.user.loading);
   const [user, setUser] = useState();
+
   useEffect(() => {
     const getUser = async () => {
       const { data } = await userApi.read(id);
@@ -41,9 +38,14 @@ const UserUpdate = () => {
         navigate("/admin/users");
       });
   };
+
+  useEffect(() => {
+    dispatch(User_read(id));
+  }, [id]);
+
   return (
     <>
-      <div className="content-wrapper pb-[300px]">
+      <div className="content-wrapper">
         {loading === false ? (
           <div className="pb-[500px]">
             <div className="container mx-auto pt-5 ">
@@ -61,7 +63,6 @@ const UserUpdate = () => {
                       style={{ width: "330px" }}
                       type="text"
                       id="fullname"
-                      defaultValue="${user.name}"
                     />
 
                     <p className="mb-2 mt-4 font-semibold">
@@ -74,7 +75,6 @@ const UserUpdate = () => {
                       style={{ width: "330px" }}
                       type="email"
                       id="email"
-                      defaultValue="${user.email}"
                       disabled
                     />
                   </div>
@@ -122,9 +122,7 @@ const UserUpdate = () => {
             </div>
           </div>
         ) : (
-          <div className="py-[300px]">
-            <Spin className="mx-auto" color="#0d6efd" width="30px" height="30px" />
-          </div>
+          <Spinner />
         )}
       </div>
     </>

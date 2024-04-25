@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import Spin from "react-cssfx-loading/lib/Spin";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { User_list, User_remove } from "../../../slice/userSlice";
-import { SuccessMessage, WarningMessage } from "../../../utils/util";
-
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import Spinner from "../../../components/admin/Spinner";
+import { User_list, User_remove } from "../../../slice/userSlice";
+import { SuccessMessage, WarningMessage } from "../../../utils/util";
 
 const UserManagerPage = () => {
   const dispatch = useDispatch();
@@ -38,9 +37,9 @@ const UserManagerPage = () => {
   };
   return (
     <>
-      <div className="pb-[500px]">
+      <div className="h-100">
         {loading === false ? (
-          <div className="pb-[500px]">
+          <div>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <h1 className="h2 ml-5 mt-2">QUẢN TRỊ NGƯỜI DÙNG</h1>
             </div>
@@ -119,9 +118,7 @@ const UserManagerPage = () => {
             </div>
           </div>
         ) : (
-          <div className="py-[300px]">
-            <Spin className="mx-auto" color="#0d6efd" width="30px" height="30px" />
-          </div>
+          <Spinner />
         )}
       </div>
     </>

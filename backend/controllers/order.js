@@ -1,4 +1,4 @@
-import { updateProductQuantity } from "../helper/order";
+import { getOrderDataDayByDayInMonth, updateProductQuantity } from "../helper/order";
 import Order from "../models/order";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -128,11 +128,26 @@ export const getOrderDaysSummary = async (req, res) => {
           totalCancelPrice: {
             $sum: { $cond: [{ $eq: ["$status", "cancel"] }, "$totalPrice", 0] },
           },
+          totalPrice: {
+            $sum: "$totalPrice",
+          },
         },
       },
     ]);
 
-    const respData = result.length > 0 ? result[0] : {};
+    const respData =
+      result.length > 0
+        ? result[0]
+        : {
+            totalOrders: 0,
+            totalOrderSuccess: 0,
+            totalOrderPending: 0,
+            totalOrderCancel: 0,
+            totalSuccessPrice: 0,
+            totalPendingPrice: 0,
+            totalCancelPrice: 0,
+            totalPrice: 0,
+          };
 
     const targetMonth = dayjs(monthWithZeroAtFirst, "MM/YYYY", true).get("month") + 1;
     respData.month = targetMonth;
@@ -167,10 +182,9 @@ export const getOrderDaysOfMonth = async (req, res) => {
       createdAt: { $gte: startDate, $lte: endDate },
     });
 
-    console.log("Debug_here orders: ", orders);
+    const results = getOrderDataDayByDayInMonth(orders, monthWithZeroAtFirst);
 
-    // Trả về kết quả
-    res.status(200).json([]);
+    res.status(200).json(results);
   } catch (error) {
     console.log("Debug_here error: ", error);
     res.status(500).json({ error: "Có lỗi xảy ra" });

@@ -25,9 +25,9 @@ const ProductItem = ({ product }) => {
           </span>
         </NavLink>
         <p className="text-red-500 text-lg font-bold py-1">
-          {prices(Number(product.priceSale)).replace("VND", "Đ")}
+          {prices(Number(product.priceSale)).replace("VND", "₫")}
           <span className="text-gray-500 text-base ml-2 font-bold pt-1italic line-through">
-            {prices(Number(product.price)).replace("VND", "Đ")}
+            {prices(Number(product.price)).replace("VND", "₫")}
           </span>
         </p>
         {!isSoldOut && (

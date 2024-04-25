@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Spin from "react-cssfx-loading/lib/Spin";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import Spinner from "../../../components/admin/Spinner";
 import { Order_read, Order_update } from "../../../slice/orderSlice";
 import { SuccessMessage } from "../../../utils/util";
 
@@ -19,6 +19,7 @@ const OrderUpdatePage = () => {
 
   const loading = useSelector(state => state.order.loading);
   const [order, setOrder] = useState();
+  const isAcceptCancelOrder = order?.checkoutStatus !== "success" || order?.status !== "cancel";
 
   const onSubmit = data => {
     const newStatus = {
@@ -44,7 +45,7 @@ const OrderUpdatePage = () => {
 
   return (
     <>
-      <div className="pb-[660px]">
+      <div className="h-100">
         {loading === false ? (
           <div className="content-wrapper ">
             <div className="container mx-auto pt-5 text-center">
@@ -60,7 +61,7 @@ const OrderUpdatePage = () => {
                 >
                   <option value="pending">Chưa duyệt</option>
                   <option value="success">Duyệt</option>
-                  {order?.checkoutStatus !== "success" && <option value="cancel">Huỷ</option>}
+                  {isAcceptCancelOrder && <option value="cancel">Huỷ</option>}
                 </select>
                 <p className="error text-red-500 text-sm font-semibold" />
                 <input
@@ -82,9 +83,7 @@ const OrderUpdatePage = () => {
             </div>
           </div>
         ) : (
-          <div className="py-[300px]">
-            <Spin className="mx-auto" color="#0d6efd" width="30px" height="30px" />
-          </div>
+          <Spinner />
         )}
       </div>
     </>

@@ -3,6 +3,7 @@ import { useNavigate, NavLink, Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
   const navigate = useNavigate();
+
   const logout = () => {
     if (localStorage.getItem("user")) {
       navigate("/signin");
@@ -34,19 +35,19 @@ const AdminLayout = () => {
           </div>
         </div>
       </header>
-      <div className="grid grid-cols-12">
-        <nav className="col-span-2 bg-blue-600">
+      <div className="min-h-[calc(100vh-62px)] flex">
+        <nav className="bg-blue-600 w-64 fixed top-[62px] bottom-0 left-0">
           <ul className="nav flex-column mt-[20px]">
             <li className="nav-item py-2">
               <NavLink
                 className="nav-link text-md text-white font-semibold hover:bg-[#1E90FF] rounded-md"
                 aria-current="page"
-                to="/admin"
+                to="dashboard"
               >
                 <span style={{ padding: "0 4px 0 2px" }}>
-                  <i className="fas fa-home" />
+                  <i className="fas fa-chart-line"></i>
                 </span>{" "}
-                Trang Chủ
+                Báo cáo
               </NavLink>
             </li>
             <li className="nav-item py-2">
@@ -96,7 +97,7 @@ const AdminLayout = () => {
             </li>
           </ul>
         </nav>
-        <div className="col-span-10">
+        <div className="pl-64 flex-grow-1">
           <Outlet />
         </div>
       </div>

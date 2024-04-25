@@ -12,7 +12,7 @@ const OrderDetailPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const message = searchParams.get("message");
   const checkoutStatus = searchParams.get("checkoutStatus");
-  const { user } = isAuthenticated();
+  const isAuth = isAuthenticated();
 
   useEffect(() => {
     dispatch(Order_read(id));
@@ -23,7 +23,7 @@ const OrderDetailPage = () => {
 
   useEffect(() => {
     if (message) {
-      if (checkoutStatus) {
+      if (checkoutStatus === "success") {
         SuccessMessage(message, 3000);
       } else {
         ErrorMessage(message, 3000);
@@ -34,10 +34,10 @@ const OrderDetailPage = () => {
   }, [checkoutStatus, message]);
 
   useEffect(() => {
-    if (!user) {
+    if (!isAuth) {
       navigate("/signin");
     }
-  }, [user]);
+  }, [isAuth]);
 
   return (
     <>
@@ -96,15 +96,23 @@ const OrderDetailPage = () => {
                       {order?.status
                         ? order?.status === "success"
                           ? "Thành công"
-                          : "Chờ duyệt"
+                          : order?.status === "pending"
+                          ? "Chờ duyệt"
+                          : "Huỷ"
                         : ""}
-                      {order.status === "pending" ? (
-                        <span className="text-[#F29339] px-1">
+                      {order.status === "pending" && (
+                        <span className="text-[#F29339] pl-2">
                           <i className="far fa-clock"></i>
                         </span>
-                      ) : (
-                        <span className="text-green-500 px-1">
+                      )}
+                      {order.status === "success" && (
+                        <span className="text-green-500 pl-2">
                           <i className="fas fa-check"></i>
+                        </span>
+                      )}
+                      {order.status === "cancel" && (
+                        <span className="text-red-500 pl-2">
+                          <i class="fas fa-times"></i>
                         </span>
                       )}
                     </span>
@@ -115,15 +123,23 @@ const OrderDetailPage = () => {
                       {order?.checkoutStatus
                         ? order?.checkoutStatus === "success"
                           ? "Thành công"
-                          : "Chưa thanh toán"
+                          : order?.checkoutStatus === "pending"
+                          ? "Chưa thanh toán"
+                          : "Huỷ"
                         : ""}
-                      {order.checkoutStatus === "success" ? (
-                        <span className="text-green-500 px-1">
+                      {order.checkoutStatus === "success" && (
+                        <span className="text-green-500 pl-2">
                           <i className="fas fa-check"></i>
                         </span>
-                      ) : (
-                        <span className="text-[#F29339] px-1">
+                      )}
+                      {order.checkoutStatus === "pending" && (
+                        <span className="text-[#F29339] pl-2">
                           <i className="far fa-clock"></i>
+                        </span>
+                      )}
+                      {order.checkoutStatus === "fail" && (
+                        <span className="text-red-400 pl-2">
+                          <i class="fas fa-times"></i>
                         </span>
                       )}
                     </span>
@@ -131,7 +147,7 @@ const OrderDetailPage = () => {
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
                     <span className="font-semibold">Tổng tiền:</span>{" "}
                     <span className="font-bold text-red-500">
-                      {prices(Number(order && order.totalPrice)).replace("VND", "Đ")}
+                      {prices(Number(order && order.totalPrice)).replace("VND", "₫")}
                     </span>
                   </p>
                 </div>
@@ -163,7 +179,7 @@ const OrderDetailPage = () => {
                           </td>
                           <td className="align-middle">
                             <span className="cart_price_show">
-                              {prices(Number(item.price)).replace("VND", "Đ")}
+                              {prices(Number(item.price)).replace("VND", "₫")}
                             </span>
                             <span className="cart_price hidden">{Number(item.price)}</span>
                           </td>
@@ -172,7 +188,7 @@ const OrderDetailPage = () => {
                             <span className="cart_cost_show font-semibold">
                               {prices(Number(item.price) * Number(item.quantity)).replace(
                                 "VND",
-                                "Đ"
+                                "₫"
                               )}
                             </span>
                             <span className="cart_cost hidden ">

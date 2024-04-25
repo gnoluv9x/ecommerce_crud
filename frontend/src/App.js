@@ -20,7 +20,7 @@ import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 
 import AdminLayout from "./components/admin/AdminLayout";
-import Dashboard from "./pages/admin/Dashboard";
+import Dashboard from "./pages/admin/dashboard";
 import CategoryAddPage from "./pages/admin/category/CategoryAddPage";
 import CategoryManagerPage from "./pages/admin/category/CategoryManagerPage";
 import CategoryUpdatePage from "./pages/admin/category/CategoryUpdatePage";
@@ -79,7 +79,7 @@ export default function App() {
                 </PrivateRoute>
               }
             >
-              <Route index element={<Navigate to="dashboard" />} />
+              <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<Dashboard />} />
 
               <Route path="products" element={<ProductManagerPage />} />
@@ -96,10 +96,12 @@ export default function App() {
 
               <Route path="users" element={<UserManagerPage />} />
               <Route path="users/update/:id" element={<UserUpdatePage />} />
+              <Route path="*" element={<Navigate to="dashboard" replace />} />
             </Route>
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/signin" element={<SignInPage />} />
-            <Route path="/*" element={<Error404Page />} />
+
+            <Route path="signup" element={<SignUpPage />} />
+            <Route path="signin" element={<SignInPage />} />
+            <Route path="*" element={<Error404Page />} />
           </Routes>
         </ScrollToTopRouter>
       </BrowserRouter>
@@ -118,11 +120,7 @@ export default function App() {
   );
 }
 function LayoutAdmin() {
-  return (
-    <div>
-      <AdminLayout />
-    </div>
-  );
+  return <AdminLayout />;
 }
 function LayoutWebsite() {
   return (

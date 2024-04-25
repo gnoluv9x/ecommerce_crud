@@ -6,7 +6,7 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { OrderByUser_remove, Order_listByUser } from "../../slice/orderSlice";
-import { SuccessMessage, prices } from "../../utils/util";
+import { SuccessMessage, getUserInfos, prices } from "../../utils/util";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -38,10 +38,11 @@ const OrderPage = () => {
   };
 
   useEffect(() => {
-    const user = Cookies.get("accessToken");
-    if (!user) {
+    const isAuth = Cookies.get("accessToken");
+    if (!isAuth) {
       navigate("/signin");
     } else {
+      const { user } = getUserInfos();
       dispatch(Order_listByUser(user._id));
     }
   }, []);
@@ -81,7 +82,7 @@ const OrderPage = () => {
                       <th className="w-[20%]">Họ và tên</th>
                       <th className="w-[10%]">Số điện thoại</th>
                       <th className="w-[10%]">Tổng tiền</th>
-                      <th className="w-[20%]">Ngày đặt hàng</th>
+                      <th className="w-[10%]">Ngày đặt hàng</th>
                       <th className="w-[10%]">Trạng thái</th>
                       <th className="w-[15%]">Trạng thái thanh toán</th>
                       <th className="w-[10%]">Tuỳ chọn</th>
@@ -99,10 +100,10 @@ const OrderPage = () => {
                             <span>{item.phoneNumber}</span>
                           </td>
                           <td className="align-middle">
-                            <span>{prices(item.totalPrice).replace("VND", "Đ")}</span>
+                            <span>{prices(item.totalPrice).replace("VND", "₫")}</span>
                           </td>
                           <td className="align-middle">
-                            <span>
+                            <span className="break-words">
                               {item.createdAt
                                 ? dayjs(item.createdAt).format("HH:mm:ss DD/MM/YYYY")
                                 : ""}
@@ -110,7 +111,7 @@ const OrderPage = () => {
                           </td>
                           <td className="align-middle">
                             <span>
-                              {item.status === "success"
+                              {item.status === "pending"
                                 ? "Chờ duyệt"
                                 : item.status === "success"
                                 ? "Thành công"
@@ -134,16 +135,26 @@ const OrderPage = () => {
                           </td>
                           <td className="align-middle">
                             <span>
-                              {item.checkoutStatus === "pending" ? "Chưa thanh toán" : "Thành công"}
+                              {item.checkoutStatus === "pending"
+                                ? "Chưa thanh toán"
+                                : item.checkoutStatus === "success"
+                                ? "Thành công"
+                                : "Huỷ"}
                             </span>
                             <span className="checkStatus">
-                              {item.checkoutStatus === "pending" ? (
+                              {item.checkoutStatus === "pending" && (
                                 <span className="text-[#F29339] px-1">
                                   <i className="far fa-clock"></i>
                                 </span>
-                              ) : (
+                              )}
+                              {item.checkoutStatus === "success" && (
                                 <span className="text-lg text-green-500 px-1">
                                   <i className="fas fa-check-circle"></i>
+                                </span>
+                              )}
+                              {item.checkoutStatus === "fail" && (
+                                <span className="text-lg text-red-500 px-1">
+                                  <i class="fas fa-times"></i>
                                 </span>
                               )}
                             </span>
