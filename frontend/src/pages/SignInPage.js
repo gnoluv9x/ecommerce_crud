@@ -36,6 +36,7 @@ function SignInPage() {
 
   const handleForgotPassword = event => {
     event.stopPropagation();
+    navigate("/forgot-password");
   };
 
   useEffect(() => {

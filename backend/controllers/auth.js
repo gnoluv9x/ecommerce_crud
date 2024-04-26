@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import { generateAccessToken, generateRefreshToken } from "../helper";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
+import { sendMailService } from "../services/sendMailservice";
+import crypto from "crypto";
 dotenv.config();
 
 export async function signup(req, res) {
@@ -118,6 +120,44 @@ export async function refreshToken(req, res, next) {
     res.status(200).json({ accessToken });
   } catch (error) {
     console.error("Lỗi khi giải mã hoặc tạo access token:", error);
+    res.status(500).json({ error: "Đã xảy ra lỗi khi xử lý yêu cầu." });
+  }
+}
+
+export async function forgotPassword(req, res, next) {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(404).json({ error: "Chưa truyền email" });
+    }
+
+    User.findOne({ email: email.toLowerCase() }, async (error, user) => {
+      if (!!error || !user) {
+        return res.status(404).json({ status: false, message: "Người dùng không tồn tại" });
+      } else {
+        const newPassword = crypto.randomBytes(10).toString("hex");
+        user.password = newPassword;
+        await user.save();
+
+        const html = /*html*/ `
+        <div>
+          <div>Bạn đã yêu cầu lấy lại mật khẩu, đây là mật khẩu mới của bạn:</div>
+          <div>Mật khẩu mới: <strong>${newPassword}</strong></div>
+          <p>Bạn có thể click vào link này để <a href="http://localhost:4001/signin">đăng nhập ngay</a></p>
+        </div>
+        `;
+
+        const emailInfos = await sendMailService(email, html, "Lấy lại mật khẩu");
+        console.log("Debug_here emailInfos: ", emailInfos);
+
+        return res
+          .status(200)
+          .json({ status: true, message: "Lấy lại mật khẩu thành công, vui lòng check email." });
+      }
+    });
+  } catch (error) {
+    console.error("Lỗi:", error);
     res.status(500).json({ error: "Đã xảy ra lỗi khi xử lý yêu cầu." });
   }
 }

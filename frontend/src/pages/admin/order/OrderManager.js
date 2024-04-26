@@ -141,7 +141,7 @@ const OrderManager = () => {
                                   <div className="">
                                     Thât bại{" "}
                                     <span className="text-red-500 ml-1">
-                                      <i class="fas fa-ban"></i>
+                                      <i className="fas fa-ban"></i>
                                     </span>
                                   </div>
                                 )}

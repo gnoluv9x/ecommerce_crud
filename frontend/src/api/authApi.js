@@ -1,17 +1,19 @@
 import { axiosClient } from "./axiosClient";
 
+const BASE = "/auth";
+
 const authApi = {
   signup(user) {
-    const url = "/auth/signup";
+    const url = `${BASE}/signup`;
     return axiosClient.post(url, user);
   },
   signin(user) {
-    const url = "/auth/signin";
+    const url = `${BASE}/signin`;
     return axiosClient.post(url, user);
   },
-  // signout(){
-  //     const url ='/signout';
-  //     return axiosClient.get(url);
-  // }
+  forgotPassword(body) {
+    const url = `${BASE}/forgot-password`;
+    return axiosClient.post(url, body);
+  },
 };
 export default authApi;

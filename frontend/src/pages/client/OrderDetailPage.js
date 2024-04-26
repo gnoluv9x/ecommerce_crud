@@ -112,7 +112,7 @@ const OrderDetailPage = () => {
                       )}
                       {order.status === "cancel" && (
                         <span className="text-red-500 pl-2">
-                          <i class="fas fa-times"></i>
+                          <i className="fas fa-times"></i>
                         </span>
                       )}
                     </span>
@@ -139,7 +139,7 @@ const OrderDetailPage = () => {
                       )}
                       {order.checkoutStatus === "fail" && (
                         <span className="text-red-400 pl-2">
-                          <i class="fas fa-times"></i>
+                          <i className="fas fa-times"></i>
                         </span>
                       )}
                     </span>
@@ -172,7 +172,7 @@ const OrderDetailPage = () => {
                         <tr className="text-center" key={item._id}>
                           <td className="align-middle">{index + 1}</td>
                           <td className=" grid grid-cols-3 gap-2">
-                            <div class="col-span-1 flex items-center">
+                            <div className="col-span-1 flex items-center">
                               <img src={item.image} alt="" width={90} />
                             </div>
                             <p className="col-span-2">{item.name}</p>

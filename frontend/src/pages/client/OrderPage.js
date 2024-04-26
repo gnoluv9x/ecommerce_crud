@@ -154,7 +154,7 @@ const OrderPage = () => {
                               )}
                               {item.checkoutStatus === "fail" && (
                                 <span className="text-lg text-red-500 px-1">
-                                  <i class="fas fa-times"></i>
+                                  <i className="fas fa-times"></i>
                                 </span>
                               )}
                             </span>

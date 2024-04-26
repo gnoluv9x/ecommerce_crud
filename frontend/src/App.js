@@ -35,6 +35,7 @@ import PrivateRoute from "./utils/privateRoute";
 
 import "react-toastify/dist/ReactToastify.css";
 import { ScrollToTopRouter } from "./hooks/scrollToTop";
+import FotgotPassword from "./pages/ForgotPassword";
 
 export default function App() {
   const [showGoToTop, setShowGoToTop] = useState(false);
@@ -101,6 +102,7 @@ export default function App() {
 
             <Route path="signup" element={<SignUpPage />} />
             <Route path="signin" element={<SignInPage />} />
+            <Route path="forgot-password" element={<FotgotPassword />} />
             <Route path="*" element={<Error404Page />} />
           </Routes>
         </ScrollToTopRouter>
