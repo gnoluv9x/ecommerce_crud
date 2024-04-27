@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import userApi from "../../../api/userApi";
 import Spinner from "../../../components/admin/Spinner";
 import { User_read, User_update } from "../../../slice/userSlice";
-import { SuccessMessage } from "../../../utils/util";
+import { ErrorMessage, SuccessMessage } from "../../../utils/util";
 
 const UserUpdate = () => {
   const {
@@ -18,29 +17,25 @@ const UserUpdate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loading = useSelector(state => state.user.loading);
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data } = await userApi.read(id);
-      setUser(data);
-      reset(data);
-    };
-    getUser();
-  }, []);
 
   const onSubmit = data => {
-    console.log(data);
     dispatch(User_update(data))
       .unwrap()
       .then(() => {
-        SuccessMessage("Cập nhật người dùng thành công!");
+        SuccessMessage("Update user successfully!");
         navigate("/admin/users");
       });
   };
 
   useEffect(() => {
-    dispatch(User_read(id));
+    dispatch(User_read(id))
+      .unwrap()
+      .then(data => {
+        reset(data);
+      })
+      .catch(() => {
+        ErrorMessage("Can not get user infomation");
+      });
   }, [id]);
 
   return (
@@ -49,7 +44,7 @@ const UserUpdate = () => {
         {loading === false ? (
           <div className="pb-[500px]">
             <div className="container mx-auto pt-5 ">
-              <h3 className="text-center font-bold pb-5 pt-4 text-xl">SỬA USER</h3>
+              <h3 className="text-center font-bold pb-5 pt-4 text-xl">UDAPTE USER</h3>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                   <div style={{ marginLeft: "530px" }}>
@@ -82,7 +77,7 @@ const UserUpdate = () => {
                 <div style={{ marginLeft: "530px" }}>
                   <p className=" mt-4 font-semibold">
                     <i className="fas fa-user-shield mr-2" />
-                    Quyền hạn
+                    Permission
                   </p>
                   <select
                     {...register("permission", { required: true })}
@@ -90,8 +85,8 @@ const UserUpdate = () => {
                     className="w-64 mt-2 h-10 rounded-md form-control"
                     style={{ width: "330px" }}
                   >
-                    <option value="0">Quản trị viên</option>
-                    <option value="1">Khách hàng</option>
+                    <option value="0">Admintrator</option>
+                    <option value="1">User</option>
                   </select>
                 </div>
                 <div
@@ -104,7 +99,7 @@ const UserUpdate = () => {
                   <input
                     className="mb-4 px-5 py-1 rounded-lg font-semibold bg-blue-500 btn btn-primary"
                     type="submit"
-                    value="CẬP NHẬT"
+                    value="UPDATE"
                     id="btn_signup"
                     style={{ marginTop: "20px" }}
                   />
@@ -115,7 +110,7 @@ const UserUpdate = () => {
               <div className="text-center mt-2">
                 <Link to="/admin/users">
                   <button className="btn btn-primary" type="button">
-                    Danh sách USER{" "}
+                    List all
                   </button>
                 </Link>
               </div>

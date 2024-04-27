@@ -21,7 +21,7 @@ const options = {
     },
     title: {
       display: true,
-      text: "Đơn hàng theo tháng",
+      text: "Orders by month",
     },
   },
 };

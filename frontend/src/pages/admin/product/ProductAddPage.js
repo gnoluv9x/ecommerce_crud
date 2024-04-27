@@ -5,13 +5,14 @@ import {
   uploadBytes,
   uploadBytesResumable,
 } from "@firebase/storage";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import "../../../firebase/index";
 import { Product_create } from "../../../slice/productSlice";
 import { SuccessMessage } from "../../../utils/util";
+import { Category_list } from "../../../slice/categorySlice";
 
 const ProductAddPage = () => {
   const {
@@ -48,16 +49,21 @@ const ProductAddPage = () => {
         console.log("Debug_here err: ", err);
       });
   };
+
+  useEffect(() => {
+    dispatch(Category_list());
+  }, []);
+
   return (
     <>
       <div>
         <div className="content-wrapper pb-[360px] overflow-hidden">
           <div className="container mx-auto pt-5">
-            <h3 className="text-center font-bold pb-4 text-xl">THÊM SẢN PHẨM</h3>
+            <h3 className="text-center font-bold pb-4 text-xl">ADD PRODUCT</h3>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-2">
                 <div className="ml-48">
-                  <p className="font-semibold">DANH MỤC SẢN PHẨM</p>
+                  <p className="font-semibold">PRODUCT CATEGORY</p>
                   <select
                     autoFocus
                     {...register("category", { required: true })}
@@ -75,10 +81,10 @@ const ProductAddPage = () => {
                   </select>
                   <div>
                     {errors.category && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please choose an category</span>
                     )}
                   </div>
-                  <p className="font-semibold mt-3">TÊN SẢN PHẨM:</p>
+                  <p className="font-semibold mt-3">PRODUCT NAME:</p>
                   <textarea
                     className="px-2 form-control checkValidate"
                     {...register("name", { required: true })}
@@ -89,11 +95,11 @@ const ProductAddPage = () => {
                   />
                   <div>
                     {errors.name && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please enter product name</span>
                     )}
                   </div>
 
-                  <p className="font-semibold mt-3">ẢNH</p>
+                  <p className="font-semibold mt-3">IMAGE</p>
                   <input
                     type="file"
                     className="checkValidate"
@@ -102,12 +108,12 @@ const ProductAddPage = () => {
                   />
                   <div>
                     {errors.image && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please choose an image</span>
                     )}
                   </div>
                 </div>
                 <div className="ml-24" style={{ width: "700px" }}>
-                  <p className="font-semibold">GIÁ TIỀN</p>
+                  <p className="font-semibold">PRICE</p>
                   <input
                     type="number"
                     className="px-2 form-control checkValidate"
@@ -117,11 +123,11 @@ const ProductAddPage = () => {
                   />
                   <div>
                     {errors.price && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please enter price</span>
                     )}
                   </div>
 
-                  <p className="font-semibold mt-3">GIÁ KHUYẾN MÃI</p>
+                  <p className="font-semibold mt-3">PROMOTION PRICE</p>
                   <input
                     type="number"
                     className="px-2 form-control checkValidate"
@@ -131,11 +137,11 @@ const ProductAddPage = () => {
                   />
                   <div>
                     {errors.priceSale && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please enter promotion price</span>
                     )}
                   </div>
 
-                  <p className="font-semibold mt-3">BẢO HÀNH</p>
+                  <p className="font-semibold mt-3">WARRANTY (MONTHS)</p>
                   <input
                     type="text"
                     className="px-2 form-control checkValidate"
@@ -145,11 +151,11 @@ const ProductAddPage = () => {
                   />
                   <div>
                     {errors.guarantee && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please enter warranty</span>
                     )}
                   </div>
 
-                  <p className="font-semibold mt-3">SỐ LƯỢNG</p>
+                  <p className="font-semibold mt-3">QUANTITY</p>
                   <input
                     type="number"
                     className="px-2 form-control checkValidate"
@@ -159,7 +165,7 @@ const ProductAddPage = () => {
                   />
                   <div>
                     {errors.quantity && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please enter quantity</span>
                     )}
                   </div>
                 </div>
@@ -169,7 +175,7 @@ const ProductAddPage = () => {
                   id="btn_add"
                   className="text-center mt-5 px-3 py-2 text-white bg-red-600 rounded-full mb-5 font-semibold hover:bg-red-700"
                   type="submit"
-                  value="THÊM SẢN PHẨM"
+                  value="ADD PRODUCT"
                 />
               </div>
             </form>
@@ -178,7 +184,7 @@ const ProductAddPage = () => {
             <div className="text-center mt-2">
               <Link to="/admin/products">
                 <button className="btn btn-primary" type="button">
-                  Tất cả sản phẩm
+                  List all
                 </button>
               </Link>
             </div>

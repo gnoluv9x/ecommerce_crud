@@ -17,57 +17,61 @@ const OrderDetailPageAdmin = () => {
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 className="h2 ml-5 mt-2">CHI TIẾT ĐƠN HÀNG</h1>
+        <h1 className="h2 ml-5 mt-2">ORDER DETAILS</h1>
       </div>
       <div className="mx-auto grid grid-cols-6 gap-2 w-[1200px]">
         <div className="col-span-2 text-left  ">
-          <h4 className="text-center text-2xl font-semibold border-b py-2">
-            Thông tin người mua hàng
-          </h4>
+          <h4 className="text-center text-2xl font-semibold border-b py-2">Buyer information</h4>
           <div className="px-4 mt-4">
             <div>
-              <p className="mt-3">
-                <span className="font-semibold">Họ và tên:</span> <span>{order && order.name}</span>
+              <p className="mt-3 flex justify-between border-b">
+                <span className="font-semibold">Full name:</span> <span>{order && order.name}</span>
               </p>
-              <p className="mt-3">
-                <span className="font-semibold">Địa chỉ:</span>{" "}
+              <p className="mt-3 flex justify-between border-b">
+                <span className="font-semibold">Address:</span>{" "}
                 <span>{order && order.address}</span>
               </p>
-              <p className="mt-3">
-                <span className="font-semibold">SDT:</span>{" "}
+              <p className="mt-3 flex justify-between border-b">
+                <span className="font-semibold">Phone number:</span>{" "}
                 <span>{order && order.phoneNumber}</span>
               </p>
-              <p className="mt-3">
+              <p className="mt-3 flex justify-between border-b">
                 <span className="font-semibold">Email:</span> <span>{order && order.email}</span>
               </p>
-              <p className="mt-3">
-                <span className="font-semibold">Ngày đặt:</span>{" "}
+              <p className="mt-3 flex justify-between border-b">
+                <span className="font-semibold">Order date:</span>{" "}
                 <span>{order && order.createdAt}</span>
               </p>
-              <p className="mt-3">
-                <span className="font-semibold">Số sản phẩm:</span>{" "}
+              <p className="mt-3 flex justify-between border-b">
+                <span className="font-semibold">Quantity:</span>{" "}
                 <span>{order && order.cartNumber}</span>
               </p>
-              <p className="mt-3">
-                <span className="font-semibold">Ghi chú: </span> {order && order.note}
+              <p className="mt-3 flex justify-between border-b">
+                <span className="font-semibold">Note: </span> {order && order.note}
               </p>
-              <p className="mt-3">
-                <span className="font-semibold">Trạng thái:</span>{" "}
-                <span>
-                  {order && order.status}
-                  {order.status === "CHƯA DUYỆT" ? (
-                    <span className="text-red-500 px-1">
-                      <i className="fas fa-times"></i>
-                    </span>
-                  ) : (
+              <p className="mt-3 flex justify-between border-b">
+                <span className="font-semibold">Status:</span>{" "}
+                <span className="capitalize">
+                  {order.status}
+                  {order.status === "success" && (
                     <span className="text-green-500 px-1">
                       <i className="fas fa-check"></i>
                     </span>
                   )}
+                  {order.status === "pending" && (
+                    <span className="text-[#F29339] pl-2">
+                      <i className="far fa-clock"></i>
+                    </span>
+                  )}
+                  {order.status === "cancel" && (
+                    <span className="text-red-500 px-1">
+                      <i className="fas fa-times"></i>
+                    </span>
+                  )}
                 </span>
               </p>
-              <p className="mt-3">
-                <span className="font-semibold">Tổng tiền:</span>{" "}
+              <p className="mt-3 flex justify-between border-b">
+                <span className="font-semibold">Total price:</span>{" "}
                 <span className="font-bold text-red-500">
                   {prices(Number(order && order.totalPrice)).replace("VND", "₫")}
                 </span>
@@ -76,15 +80,15 @@ const OrderDetailPageAdmin = () => {
           </div>
         </div>
         <div className="col-span-4 ">
-          <h4 className="text-center text-2xl font-semibold py-2 border-b">Thông tin sản phẩm</h4>
+          <h4 className="text-center text-2xl font-semibold py-2 border-b">Product info</h4>
           <table className="mx-auto text-center table table-hover">
             <thead>
               <tr className="text-center">
-                <th style={{ width: "50px" }}>STT</th>
-                <th style={{ width: "300px" }}>Tên sản phẩm</th>
-                <th style={{ width: "150px" }}>₫ơn giá</th>
-                <th style={{ width: "100px" }}>Số lượng</th>
-                <th style={{ width: "150px" }}>Thành tiền</th>
+                <th style={{ width: "50px" }}>Index</th>
+                <th style={{ width: "300px" }}>Product name</th>
+                <th style={{ width: "150px" }}>Price</th>
+                <th style={{ width: "100px" }}>Quantity</th>
+                <th style={{ width: "150px" }}>Total price</th>
               </tr>
             </thead>
             <tbody>

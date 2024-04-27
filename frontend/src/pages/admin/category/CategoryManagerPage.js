@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import productApi from "../../../api/productApi";
 import Spinner from "../../../components/admin/Spinner";
 import { Category_list, Category_remove } from "../../../slice/categorySlice";
-import { SuccessMessage, WarningMessage } from "../../../utils/util";
+import { ErrorMessage, SuccessMessage, WarningMessage } from "../../../utils/util";
 
 const CategoryManagerPage = () => {
   const dispatch = useDispatch();
@@ -15,14 +15,20 @@ const CategoryManagerPage = () => {
 
   const confirmRemove = id => {
     confirmAlert({
-      title: "XÁC NHẬN?",
-      message: "Bạn có chắc chắn muốn xoá?",
+      title: "CONFIRM?",
+      message: "Are you sure you want to delete?",
       buttons: [
         {
           label: "Yes",
           onClick: () => {
-            dispatch(Category_remove(id));
-            SuccessMessage("Xoá thành công!");
+            dispatch(Category_remove(id))
+              .unwrap()
+              .then(() => {
+                SuccessMessage("Delete successfully");
+              })
+              .catch(() => {
+                ErrorMessage("Delete failed");
+              });
           },
         },
         {
@@ -42,12 +48,12 @@ const CategoryManagerPage = () => {
       {loading === false ? (
         <div className="">
           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 className="h2 ml-5 mt-2">QUẢN TRỊ DANH MỤC</h1>
+            <h1 className="h2 ml-5 mt-2">CATEGORIES MANAGEMENT</h1>
           </div>
           <div>
             <div className="text-center mt-[30px]">
               <Link to="add">
-                <button className="btn btn-primary mx-auto">Thêm Danh Mục</button>
+                <button className="btn btn-primary mx-auto">Add Category</button>
               </Link>
             </div>
             <table
@@ -56,10 +62,10 @@ const CategoryManagerPage = () => {
             >
               <thead>
                 <tr className="text-center">
-                  <th scope="col">STT</th>
-                  <th scope="col">TÊN DANH MỤC</th>
+                  <th scope="col">INDEX</th>
+                  <th scope="col">CATEGORY NAME</th>
                   <th className="text-center" colSpan={2} scope="col">
-                    TUỲ CHỌN
+                    ACTIONS
                   </th>
                 </tr>
               </thead>
@@ -86,13 +92,13 @@ const CategoryManagerPage = () => {
                           <button
                             onClick={async () => {
                               let { data } = await productApi.productByCategory(item._id);
-                              console.log("data: ", data);
 
                               if (data.length === 0) {
                                 confirmRemove(item._id);
                               } else {
                                 WarningMessage(
-                                  "Hãy xoá hết sản phẩm thuộc danh mục này trước khi muốn xoá danh mục!"
+                                  "Please delete all products in this category before deleting the category!",
+                                  3000
                                 );
                               }
                             }}

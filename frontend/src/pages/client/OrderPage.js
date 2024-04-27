@@ -78,7 +78,7 @@ const OrderPage = () => {
                 <table className="table table-hover">
                   <thead>
                     <tr className="text-center">
-                      <th className="w-[5%]">STT</th>
+                      <th className="w-[5%]">Index</th>
                       <th className="w-[20%]">Full name</th>
                       <th className="w-[10%]">Phone number</th>
                       <th className="w-[10%]">Total amount</th>
@@ -136,7 +136,7 @@ const OrderPage = () => {
                           <td className="align-middle">
                             <span>
                               {item.checkoutStatus === "pending"
-                                ? "Unpaid"
+                                ? "Pending"
                                 : item.checkoutStatus === "success"
                                 ? "Success"
                                 : "Cancel"}

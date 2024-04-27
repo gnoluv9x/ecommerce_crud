@@ -21,7 +21,7 @@ const DashboardFilters = ({ filters, onChangeFilters }) => {
     <div className="dashboard-filters mt-2 grid grid-cols-8 gap-2">
       <div className="dashboard-month col-span-1">
         <label for="month" className="block text-sm font-medium text-gray-600 dark:text-white">
-          Chọn tháng
+          Choose month
         </label>
         <select
           id="month"
@@ -38,7 +38,7 @@ const DashboardFilters = ({ filters, onChangeFilters }) => {
       </div>
       <div className="dashboard-year col-span-1">
         <label for="year" className="block text-sm font-medium text-gray-600 dark:text-white">
-          Chọn năm
+          Choose year
         </label>
         <select
           id="year"
@@ -59,7 +59,7 @@ const DashboardFilters = ({ filters, onChangeFilters }) => {
           className="text-white bg-primary focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2"
           onClick={handleView}
         >
-          Xem
+          Submit
         </button>
       </div>
     </div>

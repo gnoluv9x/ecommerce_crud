@@ -9,13 +9,17 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import productApi from "../../../api/productApi";
 import Spinner from "../../../components/admin/Spinner";
 import "../../../firebase/index";
+import { Category_list } from "../../../slice/categorySlice";
 import { Product_read, Product_update } from "../../../slice/productSlice";
 import { SuccessMessage } from "../../../utils/util";
 
 const ProductUpdatePage = () => {
+  const categories = useSelector(state => state.category.data);
+  const product = useSelector(state => state.product.data.product);
+  const loading = useSelector(state => state.product.loading);
+
   const {
     register,
     handleSubmit,
@@ -25,22 +29,6 @@ const ProductUpdatePage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    dispatch(Product_read(id));
-  }, []);
-
-  const categories = useSelector(state => state.category.data);
-  const product = useSelector(state => state.product.data.product);
-  console.log(product);
-  const loading = useSelector(state => state.product.loading);
-
-  useEffect(() => {
-    const getProduct = async () => {
-      const { data } = await productApi.read(id);
-      reset(data);
-    };
-    getProduct();
-  }, [id]);
 
   const onSubmit = data => {
     if (typeof data.image === "object") {
@@ -54,7 +42,7 @@ const ProductUpdatePage = () => {
           dispatch(Product_update(data))
             .unwrap()
             .then(() => {
-              SuccessMessage("Thêm sản phẩm thành công!");
+              SuccessMessage("Add product successfully");
               navigate("/admin/products");
             });
         });
@@ -63,21 +51,33 @@ const ProductUpdatePage = () => {
       dispatch(Product_update(data))
         .unwrap()
         .then(() => {
-          SuccessMessage("Cập nhật sản phẩm thành công!");
+          SuccessMessage("Update product successfully!");
           navigate("/admin/products");
         });
     }
   };
+
+  useEffect(() => {
+    dispatch(Product_read(id));
+    dispatch(Category_list());
+  }, []);
+
+  useEffect(() => {
+    if (product) {
+      reset(product);
+    }
+  }, [product]);
+
   return (
     <div>
       {loading === false ? (
-        <div className="content-wrapper overflow-hidden">
+        <div className="content-wrapper overflow-hidden mb-10">
           <div className="container mx-auto pt-5">
-            <h3 className="text-center font-bold pb-4 text-xl">CẬP NHẬT SẢN PHẨM</h3>
+            <h3 className="text-center font-bold pb-4 text-xl">UPDATE PRODUCT</h3>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-2">
                 <div className="ml-48">
-                  <p className="font-semibold">DANH MỤC SẢN PHẨM</p>
+                  <p className="font-semibold">PRODUCT CATEGORY</p>
                   <select
                     autoFocus
                     {...register("category", { required: true })}
@@ -96,10 +96,10 @@ const ProductUpdatePage = () => {
                   </select>
                   <div>
                     {errors.category && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please choose product category</span>
                     )}
                   </div>
-                  <p className="font-semibold mt-3">TÊN SẢN PHẨM:</p>
+                  <p className="font-semibold mt-3">PRODUCT NAME:</p>
                   <textarea
                     className="px-2 form-control checkValidate"
                     {...register("name", { required: true })}
@@ -110,22 +110,26 @@ const ProductUpdatePage = () => {
                   />
                   <div>
                     {errors.name && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please enter product name</span>
                     )}
                   </div>
 
-                  <p className="font-semibold mt-3">ẢNH</p>
+                  <p className="font-semibold mt-3">IMAGE</p>
+                  <img src={product?.image} className="w-[170px]" alt="" />
                   <input
-                    // id="chooseImage"
                     type="file"
                     className="checkValidate"
                     {...register("image")}
                     id="product_image"
                   />
-                  <img src={product.image} className="w-[170px]" />
+                  <div>
+                    {errors.image && !product?.image && (
+                      <span className="text-red-500 font-bold">Please choose an image</span>
+                    )}
+                  </div>
                 </div>
                 <div className="ml-24" style={{ width: "700px" }}>
-                  <p className="font-semibold">GIÁ TIỀN</p>
+                  <p className="font-semibold">PRICE</p>
                   <input
                     type="number"
                     className="px-2 form-control checkValidate"
@@ -135,11 +139,11 @@ const ProductUpdatePage = () => {
                   />
                   <div>
                     {errors.price && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please enter price</span>
                     )}
                   </div>
 
-                  <p className="font-semibold mt-3">GIÁ KHUYẾN MÃI</p>
+                  <p className="font-semibold mt-3">PROMOTION PRICE</p>
                   <input
                     type="number"
                     className="px-2 form-control checkValidate"
@@ -149,13 +153,15 @@ const ProductUpdatePage = () => {
                   />
                   <div>
                     {errors.priceSale && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">
+                        Please enter an promotion price
+                      </span>
                     )}
                   </div>
 
-                  <p className="font-semibold mt-3">BẢO HÀNH</p>
+                  <p className="font-semibold mt-3">WARRANTY (MONTHS)</p>
                   <input
-                    type="text"
+                    type="number"
                     className="px-2 form-control checkValidate"
                     {...register("guarantee", { required: true })}
                     id="product_guarantee"
@@ -163,11 +169,11 @@ const ProductUpdatePage = () => {
                   />
                   <div>
                     {errors.guarantee && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please enter warranty</span>
                     )}
                   </div>
 
-                  <p className="font-semibold mt-3">SỐ LƯỢNG</p>
+                  <p className="font-semibold mt-3">QUANTITY</p>
                   <input
                     type="number"
                     className="px-2 form-control checkValidate"
@@ -177,7 +183,7 @@ const ProductUpdatePage = () => {
                   />
                   <div>
                     {errors.quantity && (
-                      <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                      <span className="text-red-500 font-bold">Please enter quantity</span>
                     )}
                   </div>
                 </div>
@@ -185,18 +191,18 @@ const ProductUpdatePage = () => {
               <div className="text-center">
                 <input
                   id="btn_add"
-                  className="text-center mt-5 px-3 py-2 text-white bg-red-600 rounded-full mb-5 font-semibold hover:bg-red-700"
+                  className="text-center px-3 py-2 my-4 text-white bg-red-600 rounded-full font-semibold hover:bg-red-700"
                   type="submit"
-                  value="CẬP NHẬT SẢN PHẨM"
+                  value="UPDATE PRODUCT"
                 />
               </div>
             </form>
           </div>
           <div>
-            <div className="text-center mt-2">
+            <div className="text-center">
               <Link to="/admin/products">
                 <button className="btn btn-primary" type="button">
-                  Tất cả sản phẩm
+                  List all
                 </button>
               </Link>
             </div>

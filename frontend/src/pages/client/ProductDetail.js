@@ -1,29 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import productApi from "../../api/productApi";
 import ProductItem from "../../components/client/ProductItem";
-import { SuccessMessage, addToCart, prices } from "../../utils/util";
+import { ErrorMessage, SuccessMessage, addToCart, prices } from "../../utils/util";
 
 const ProductDetail = () => {
   const { id: idProduct } = useParams();
+  const navigate = useNavigate();
 
   const [product, setProduct] = useState({});
   const [productsRelated, setProductsRelated] = useState([]);
 
   useEffect(() => {
     const getProductById = async () => {
-      const { data } = await productApi.read(idProduct);
-      console.log(data);
-      setProduct(data);
+      try {
+        const { data } = await productApi.read(idProduct);
+        console.log(data);
+        setProduct(data);
+      } catch (error) {
+        console.log("Debug_here error: ", error);
+        ErrorMessage("Can not find product");
+        navigate("/");
+      }
     };
     getProductById();
   }, [idProduct]);
 
   useEffect(() => {
     const getProductsRelated = async () => {
-      const { data } = await productApi.relateProduct(idProduct);
-      console.log(data);
-      setProductsRelated(data);
+      try {
+        const { data } = await productApi.relateProduct(idProduct);
+        console.log(data);
+        setProductsRelated(data);
+      } catch (error) {
+        console.log("Debug_here error: ", error);
+      }
     };
     getProductsRelated();
   }, [idProduct]);
@@ -57,7 +68,7 @@ const ProductDetail = () => {
                 </span>
                 <p className="text-sm mt-2">
                   <span className="font-semibold">Warranty: </span>
-                  <span className="text-lg font-bold">{product && product.guarantee}</span>
+                  <span className="text-lg font-bold">{product && product.guarantee} months</span>
                 </p>
                 <p className="text-sm mt-1">
                   <span className="font-semibold">Quantity in stock: </span>

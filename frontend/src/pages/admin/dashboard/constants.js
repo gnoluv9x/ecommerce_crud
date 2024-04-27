@@ -1,50 +1,50 @@
 export const LIST_MONTHS_IN_YEAR = [
   {
-    label: "Tháng 1",
+    label: "January",
     value: "01",
   },
   {
-    label: "Tháng 2",
+    label: "February",
     value: "02",
   },
   {
-    label: "Tháng 3",
+    label: "March",
     value: "03",
   },
   {
-    label: "Tháng 4",
+    label: "April",
     value: "04",
   },
   {
-    label: "Tháng 5",
+    label: "May",
     value: "05",
   },
   {
-    label: "Tháng 6",
+    label: "June",
     value: "06",
   },
   {
-    label: "Tháng 7",
+    label: "July",
     value: "07",
   },
   {
-    label: "Tháng 8",
+    label: "August",
     value: "08",
   },
   {
-    label: "Tháng 9",
+    label: "September",
     value: "09",
   },
   {
-    label: "Tháng 10",
+    label: "October",
     value: "10",
   },
   {
-    label: "Tháng 11",
+    label: "November",
     value: "11",
   },
   {
-    label: "Tháng 12",
+    label: "December",
     value: "12",
   },
 ];

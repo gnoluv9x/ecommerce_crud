@@ -26,7 +26,12 @@ export const getPercentageOfAItem = (arr = [], currentIdx) => {
     totalPercent += percentage;
 
     if (totalPercent < 100) {
-      result[idx] = percentage;
+      if (idx === arr.length - 1) {
+        const resultTotal = Object.values(result).reduce((total, cur) => (total += cur), 0);
+        result[idx] = 100 - resultTotal;
+      } else {
+        result[idx] = percentage;
+      }
     } else {
       totalPercent -= percentage;
       const resultTotal = Object.values(result).reduce((total, cur) => (total += cur), 0);

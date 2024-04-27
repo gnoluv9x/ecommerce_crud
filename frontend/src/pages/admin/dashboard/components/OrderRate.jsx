@@ -48,7 +48,7 @@ const textCenter = {
     // Style for total number
     ctx.font = "bold 16px sans-serif";
     ctx.fillStyle = "#12161C";
-    ctx.fillText("Tỉ lệ đơn hàng", x, y);
+    ctx.fillText("Order Rate", x, y);
 
     ctx.restore();
   },
@@ -59,7 +59,7 @@ function OrderRate() {
 
   const data = useMemo(() => {
     return {
-      labels: ["Thành công", "Chờ duyệt", "Huỷ"],
+      labels: ["Success", "Pending", "Cancel"],
       datasets: [
         {
           data: [
@@ -67,7 +67,7 @@ function OrderRate() {
             summaryData?.totalOrderPending || 0,
             summaryData?.totalOrderCancel || 0,
           ],
-          backgroundColor: ["#8ad199", "#ddb78a", "#F63D68"],
+          backgroundColor: ["#4fe06e", "#ddb78a", "#F63D68"],
           hoverOffset: 3,
         },
       ],

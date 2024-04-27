@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Product_list, Product_remove } from "../../../slice/productSlice";
-import { SuccessMessage, prices } from "../../../utils/util";
+import { ErrorMessage, SuccessMessage, prices } from "../../../utils/util";
 
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
@@ -16,14 +16,20 @@ const ProductManagerPage = () => {
 
   const confirmRemove = id => {
     confirmAlert({
-      title: "XÁC NHẬN?",
-      message: "Bạn có chắc chắn muốn xoá?",
+      title: "CONFIRM?",
+      message: "Are you sure you want to delete?",
       buttons: [
         {
           label: "Yes",
           onClick: () => {
-            dispatch(Product_remove(id));
-            SuccessMessage("Xoá thành công!");
+            dispatch(Product_remove(id))
+              .unwrap()
+              .then(() => {
+                SuccessMessage("Delete successfully!");
+              })
+              .catch(() => {
+                ErrorMessage("Delete failed");
+              });
           },
         },
         {
@@ -43,44 +49,48 @@ const ProductManagerPage = () => {
       {loading === false ? (
         <div>
           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 className="h2 ml-5 mt-2">QUẢN TRỊ SẢN PHẨM</h1>
+            <h1 className="h2 ml-5 mt-2">PRODUCT MANAGEMENT</h1>
           </div>
           <div>
             <div className="text-center mt-[30px]">
               <Link to="add">
-                <button className="btn btn-primary mx-auto">Thêm Sản Phẩm</button>
+                <button className="btn btn-primary mx-auto">Add product</button>
               </Link>
             </div>
             <div className="mt-4">
               <table className="table table-hover mx-auto ">
                 <thead>
                   <tr className="text-center">
-                    <th className="text-sm border border-black" scope="col">
-                      STT
+                    <th className="align-middle text-sm border border-black" scope="col">
+                      No
                     </th>
-                    <th className="text-sm border border-black" scope="col">
-                      TÊN SẢN PHẨM
+                    <th className="align-middle text-sm border border-black" scope="col">
+                      PRODUCT'S NAME
                     </th>
-                    <th className="text-sm border border-black" scope="col">
-                      DANH MỤC
+                    <th className="align-middle text-sm border border-black" scope="col">
+                      CATEGORY
                     </th>
-                    <th className="text-sm border border-black" scope="col">
-                      ẢNH
+                    <th className="align-middle text-sm border border-black" scope="col">
+                      IMAGE
                     </th>
-                    <th className="text-sm border border-black" scope="col">
-                      GIÁ
+                    <th className="align-middle text-sm border border-black" scope="col">
+                      PRICE
                     </th>
-                    <th className="text-sm border border-black" scope="col">
-                      GIÁ KHUYẾN MÃI
+                    <th className="align-middle text-sm border border-black" scope="col">
+                      PROMOTIONAL PRICE
                     </th>
-                    <th className="text-sm border border-black" scope="col">
-                      BẢO HÀNH
+                    <th className="align-middle text-sm border border-black w-[5%]" scope="col">
+                      WARRANTY (MONTHS)
                     </th>
-                    <th className="text-sm border border-black" scope="col">
-                      SỐ LƯỢNG
+                    <th className="align-middle text-sm border border-black" scope="col">
+                      QUANTITY
                     </th>
-                    <th className="text-sm border border-black" colSpan={2} scope="col">
-                      TUỲ CHỌN
+                    <th
+                      className="align-middle text-sm border border-black"
+                      colSpan={2}
+                      scope="col"
+                    >
+                      ACTIONS
                     </th>
                   </tr>
                 </thead>
@@ -96,7 +106,9 @@ const ProductManagerPage = () => {
                             className="border border-black font-semibold"
                             style={{ width: "350px" }}
                           >
-                            <div>{item.name}</div>
+                            <div>
+                              <Link to={`/products/${item._id}`}>{item.name}</Link>
+                            </div>
                           </td>
                           <td className="border border-black font-semibold text-center">
                             {item.category.name}

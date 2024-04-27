@@ -32,6 +32,7 @@ const CartPage = () => {
   });
 
   let productOnCart = JSON.parse(localStorage.getItem("cart"));
+  console.log("Debug_here productOnCart: ", productOnCart);
   let cartNumber = localStorage.getItem("cartNumber");
   let totalPrice = localStorage.getItem("totalPrice");
 
@@ -226,7 +227,7 @@ const CartPage = () => {
                   <table>
                     <thead>
                       <tr className="text-center">
-                        <th className="border border-gray-300 w-[100px]">STT</th>
+                        <th className="border border-gray-300 w-[100px]">Index</th>
                         <th className="border border-gray-300 w-[650px]">Product name</th>
                         <th className="border border-gray-300 w-[200px]">Unit price</th>
                         <th className="border border-gray-300 w-[100px]">Quantity</th>
@@ -241,7 +242,9 @@ const CartPage = () => {
                             <td className="border border-gray-300">{index + 1}</td>
                             <td className="border border-gray-300 flex">
                               <img src={item.image} alt="" width={70} />
-                              <p className="px-2">{item.name}</p>
+                              <p className="px-2">
+                                <Link to={`/products/${item.id}`}>{item.name}</Link>
+                              </p>
                             </td>
                             <td className="border border-gray-300">
                               <span className="cart_price_show">

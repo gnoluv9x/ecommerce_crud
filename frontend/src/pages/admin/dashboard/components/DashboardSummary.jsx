@@ -16,7 +16,7 @@ const DashboardSummary = () => {
           </div>
           <div className="info">
             <div className="font-bold text-lg">{dataSummary?.totalOrders || 0}</div>
-            <div className="font-normal text-base text-gray-400">Đơn hàng</div>
+            <div className="font-normal text-base text-gray-400">Orders</div>
           </div>
         </div>
       </div>
@@ -27,7 +27,7 @@ const DashboardSummary = () => {
           </div>
           <div className="info">
             <div className="font-bold text-lg">{formatVND(dataSummary?.totalPrice) || 0} ₫</div>
-            <div className="font-normal text-base text-gray-400">Tổng trị giá</div>
+            <div className="font-normal text-base text-gray-400">Total price</div>
           </div>
         </div>
       </div>

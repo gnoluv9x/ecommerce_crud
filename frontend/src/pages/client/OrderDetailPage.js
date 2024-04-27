@@ -122,7 +122,7 @@ const OrderDetailPage = () => {
                         ? order?.checkoutStatus === "success"
                           ? "Success"
                           : order?.checkoutStatus === "pending"
-                          ? "Unpaid"
+                          ? "Pending"
                           : "Cancel"
                         : ""}
                       {order.checkoutStatus === "success" && (
@@ -158,7 +158,7 @@ const OrderDetailPage = () => {
               <table className="mx-auto text-center table table-hover">
                 <thead>
                   <tr className="text-center">
-                    <th className="w-[10%]">STT</th>
+                    <th className="w-[10%]">Index</th>
                     <th className="w-[40%]">Product name</th>
                     <th className="w-[15%]">Unit price</th>
                     <th className="w-[15%]">Quantity</th>

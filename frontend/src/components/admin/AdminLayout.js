@@ -55,7 +55,7 @@ const AdminLayout = () => {
                 <span style={{ padding: "0 4px 0 2px" }}>
                   <i className="fas fa-chart-line"></i>
                 </span>{" "}
-                Báo cáo
+                Report
               </NavLink>
             </li>
             <li className="nav-item py-2">
@@ -67,7 +67,7 @@ const AdminLayout = () => {
                   {" "}
                   <i className="fas fa-calendar-week" />
                 </span>{" "}
-                Quản Trị Danh Mục
+                Category Management
               </NavLink>
             </li>
             <li className="nav-item py-2">
@@ -78,7 +78,7 @@ const AdminLayout = () => {
                 <span style={{ padding: "0 6px 0 2px" }}>
                   <i className="fas fa-music" />
                 </span>{" "}
-                Quản Trị Sản Phẩm
+                Product Management
               </NavLink>
             </li>
             <li className="nav-item py-2">
@@ -89,7 +89,7 @@ const AdminLayout = () => {
                 <span style={{ padding: "0 6px 0 2px" }}>
                   <i className="fas fa-clipboard-list pl-[2px]"></i>
                 </span>{" "}
-                Quản Trị Đơn Hàng
+                Order Management
               </NavLink>
             </li>
             <li className="nav-item py-2">
@@ -100,7 +100,7 @@ const AdminLayout = () => {
                 <span style={{ padding: "0 6px 0 2px" }}>
                   <i className="fas fa-user"></i>
                 </span>{" "}
-                Quản Trị Người Dùng
+                User Administration
               </NavLink>
             </li>
           </ul>

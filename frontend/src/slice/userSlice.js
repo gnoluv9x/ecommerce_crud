@@ -87,7 +87,7 @@ const userSlice = createSlice({
     });
     builder.addCase(User_remove.fulfilled, (state, action) => {
       state.loading = false;
-      let index = state.data.users.findIndex(item => item._id === action.payload.data._id);
+      let index = state.data.users.findIndex(item => item._id === action.payload.deletedUser._id);
       state.data.users.splice(index, 1);
     });
 
@@ -101,7 +101,6 @@ const userSlice = createSlice({
     });
     builder.addCase(User_update.fulfilled, (state, action) => {
       state.loading = false;
-      console.log(action.payload);
       const index = state.data.users.findIndex(item => {
         return item._id === action.payload._id;
       });

@@ -20,6 +20,7 @@ const CategoryUpdatePage = () => {
 
   const categories = useSelector(state => state.category.data);
   const loading = useSelector(state => state.category.loading);
+
   const [category, setCategory] = useState();
   useEffect(() => {
     const getCate = async () => {
@@ -45,11 +46,11 @@ const CategoryUpdatePage = () => {
       dispatch(Category_update(newCategory))
         .unwrap()
         .then(() => {
-          toast.success("Cập nhật danh mục thành công!");
+          toast.success("Updated category successfully!");
           navigate("/admin/categories");
         });
     } else {
-      toast.warning("Tên danh mục đã tồn tại!");
+      toast.warning("Category name already exists!");
     }
   };
 
@@ -59,9 +60,9 @@ const CategoryUpdatePage = () => {
         {loading === false ? (
           <div className="content-wrapper overflow-hidden">
             <div className="container mx-auto pt-5 text-center">
-              <h3 className="text-center font-bold pb-4 text-xl">CẬP NHẬT DANH MỤC</h3>
+              <h3 className="text-center font-bold pb-4 text-xl">UPDATE CATEGORY</h3>
               <form className="text-center" onSubmit={handleSubmit(onSubmit)}>
-                <p className="mt-10 font-semibold">Tên Danh mục: </p>
+                <p className="mt-10 font-semibold">Category name: </p>
                 <input
                   type="text"
                   className="border pl-2 mt-2 py-2 text-2xl checkValidate"
@@ -71,13 +72,13 @@ const CategoryUpdatePage = () => {
                 <br />
                 <div>
                   {errors.name && (
-                    <span className="text-red-500 font-bold">Hãy nhập đầy đủ thông tin!</span>
+                    <span className="text-red-500 font-bold">Please enter a category name!</span>
                   )}
                 </div>
                 <p className="error text-red-500 text-sm font-semibold" />
                 <input
                   type="submit"
-                  value="Cập nhật"
+                  value="Update"
                   className="px-4 py-2 text-white bg-red-600 rounded-full mt-4 mb-5 font-semibold hover:bg-red-700"
                 />
               </form>
@@ -86,7 +87,7 @@ const CategoryUpdatePage = () => {
               <div className="text-center mt-2">
                 <Link to="/admin/categories">
                   <button className="btn btn-primary" type="button">
-                    Tất cả danh mục
+                    List categories
                   </button>
                 </Link>
               </div>

@@ -5,7 +5,7 @@ import productApi from "../api/productApi";
 const initialState = {
   data: {
     products: [],
-    product: [],
+    product: null,
     productFilter: [],
   },
   error: null,

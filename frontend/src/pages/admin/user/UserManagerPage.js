@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Spinner from "../../../components/admin/Spinner";
 import { User_list, User_remove } from "../../../slice/userSlice";
-import { SuccessMessage, WarningMessage } from "../../../utils/util";
+import { ErrorMessage, SuccessMessage, WarningMessage } from "../../../utils/util";
 
 const UserManagerPage = () => {
   const dispatch = useDispatch();
@@ -18,14 +18,20 @@ const UserManagerPage = () => {
 
   const confirmRemove = id => {
     confirmAlert({
-      title: "XÁC NHẬN?",
-      message: "Bạn có chắc chắn muốn xoá?",
+      title: "CONFIRM?",
+      message: "Are you sure you want to delete?",
       buttons: [
         {
           label: "Yes",
           onClick: () => {
-            dispatch(User_remove(id));
-            SuccessMessage("Xoá thành công!");
+            dispatch(User_remove(id))
+              .unwrap()
+              .then(resp => {
+                SuccessMessage("Delete successfully!");
+              })
+              .catch(() => {
+                ErrorMessage("Delete failed");
+              });
           },
         },
         {
@@ -41,24 +47,19 @@ const UserManagerPage = () => {
         {loading === false ? (
           <div>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-              <h1 className="h2 ml-5 mt-2">QUẢN TRỊ NGƯỜI DÙNG</h1>
+              <h1 className="h2 ml-5 mt-2">USER MANAGEMENT </h1>
             </div>
             <div>
-              {/* <div className="text-center mt-[30px]">
-                            <Link to="add">
-                                <button className="btn btn-primary mx-auto">Thêm User</button>
-                            </Link>
-                        </div> */}
               <div className="pb-10 mt-5">
                 <table className="table mx-auto text-center" style={{ maxWidth: "900px" }}>
                   <thead>
                     <tr className="text-center">
-                      <th scope="col">STT</th>
-                      <th scope="col">TÊN</th>
+                      <th scope="col">INDEX</th>
+                      <th scope="col">NAME</th>
                       <th scope="col">EMAIL</th>
-                      <th scope="col">QUYỀN HẠN</th>
+                      <th scope="col">PERMISSION</th>
                       <th className="text-center" colSpan={2} scope="col">
-                        TUỲ CHỌN
+                        ACTIONS
                       </th>
                     </tr>
                   </thead>
@@ -80,7 +81,7 @@ const UserManagerPage = () => {
                             </td>
                             <td>
                               <div className="pt-1 px-10">
-                                {item.permission === 0 ? "QUẢN TRỊ VIÊN" : "KHÁCH HÀNG"}
+                                {item.permission === 0 ? "Admintrator" : "Customer"}
                               </div>
                             </td>
                             <td style={{ width: "50px" }}>
@@ -99,7 +100,7 @@ const UserManagerPage = () => {
                                   className="text-sm px-1 border border-gray-600 rounded-lg bg-red-500 hover:bg-red-700 text-white btn btn-danger btn-remove"
                                   onClick={async () => {
                                     if (item.permission === 0) {
-                                      WarningMessage("Không thể xoá tài khoản của QUẢN TRỊ VIÊN!");
+                                      WarningMessage("Can not delete ADMINTRATOR account!");
                                     } else {
                                       confirmRemove(item._id);
                                     }
