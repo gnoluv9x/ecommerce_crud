@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import productApi from "../../api/productApi";
-import Categories from "../../components/client/Categories";
 import ProductItem from "../../components/client/ProductItem";
 import { SuccessMessage, addToCart, prices } from "../../utils/util";
 
@@ -34,7 +33,6 @@ const ProductDetail = () => {
       <div className="content bg-gray-100 pb-8 pt-5">
         <div className=" mx-auto grid grid-cols-4 gap-5 w-[1200px]">
           <aside className="col-span-1 bg-gray-100">
-            {/* <Categories></Categories> */}
             <div className="">
               <img
                 className="shadow-md transition duration-500 ease-in-out transform hover:scale-95"
@@ -58,27 +56,27 @@ const ProductDetail = () => {
                   {prices(Number(product && product.price)).replace("VND", "₫")}
                 </span>
                 <p className="text-sm mt-2">
-                  <span className="font-semibold">Bảo hành: </span>
+                  <span className="font-semibold">Warranty: </span>
                   <span className="text-lg font-bold">{product && product.guarantee}</span>
                 </p>
                 <p className="text-sm mt-1">
-                  <span className="font-semibold">Số lượng trong kho: </span>
+                  <span className="font-semibold">Quantity in stock: </span>
                   <span className="text-lg font-bold">{product && product.quantity}</span>
                 </p>
                 {product.quantity < 1 && (
-                  <div className="mt-1 text-sm font-semibold text-red-600">Hết hàng</div>
+                  <div className="mt-1 text-sm font-semibold text-red-600">Out of stock</div>
                 )}
                 <p className="text-sm mt-4">
                   <span className="text-base text-green-500">
                     <i className="fas fa-check-square" />
                   </span>{" "}
-                  Hàng Mới Về
+                  New Arrival
                 </p>
                 <p className="text-sm">
                   <span className="text-base text-green-500">
                     <i className="fas fa-check-square" />
                   </span>{" "}
-                  Mua hàng trước 15/01/2025 Giảm ngay 1.000.000 vnđ
+                  Purchase before 15/01/2025, get an immediate discount of 1.000.000 VND
                 </p>
                 <div className="mt-3">
                   <button
@@ -92,26 +90,30 @@ const ProductDetail = () => {
                         product.priceSale,
                         product.quantity
                       );
-                      SuccessMessage("Thêm sản phẩm vào giỏ hàng thành công!");
+                      SuccessMessage("Added to cart successfully!");
                     }}
                   >
-                    <p className="text-white font-bold text-lg pt-1">Thêm vào giỏ hàng</p>
+                    <p className="text-white font-bold text-lg pt-1">Add to cart</p>
                     <p className="text-white font-semibold text-sm mt-1 pb-2">
-                      Giao tận nơi hoặc nhận ở cửa hàng
+                      Deliver to your door or pick up in store
                     </p>
                   </button>
                   <div className="grid grid-cols-2 gap-2 mt-3" style={{ width: "430px" }}>
                     <div className="bg-blue-500 rounded-lg text-center ml-1 hover:bg-blue-900">
                       <Link to="/">
-                        <p className="text-white font-bold text-sm pt-1">TRẢ GÓP % QUA THẺ</p>
+                        <p className="text-white font-bold text-sm pt-1">
+                          PAYMENT IN % INSTALLMENTS VIA CARD
+                        </p>
                         <p className="text-white text-xs mt-1 pb-1">Visa, Master Card, JCB</p>
                       </Link>
                     </div>
                     <div className="bg-blue-500 rounded-lg text-center mr-1 hover:bg-blue-900">
                       <Link to="/">
-                        <p className="text-white font-bold text-sm pt-1">ĐĂNG KÝ TRẢ GÓP</p>
+                        <p className="text-white font-bold text-sm pt-1">
+                          REGISTER IN INSTALLMENTS
+                        </p>
                         <p className="text-white text-xs mt-1 pb-1">
-                          Xét duyệt nhanh qua điện thoại
+                          Quick approval over the phone
                         </p>
                       </Link>
                     </div>
@@ -133,44 +135,44 @@ const ProductDetail = () => {
                       <span>
                         <i className="fas fa-gift" />
                       </span>{" "}
-                      Quà tặng/Khuyến mãi
+                      Gifts/Promotions
                     </p>
                   </div>
                   <p className="text-sm mt-2 ml-6 text-xs">
                     <span className="text-green-400 text-xs">
                       <i className="fas fa-check-circle" />
                     </span>{" "}
-                    Tặng Windows 10 bản quyền theo máy
+                    Free Windows 10 license with your device
                   </p>
                   <p className="text-sm mt-2 ml-6 text-xs">
                     <span className="text-green-400 text-xs">
                       <i className="fas fa-check-circle" />
                     </span>{" "}
-                    Miễn phí cân màu màn hình công nghệ cao
+                    Free high-tech screen color calibration
                   </p>
                   <p className="text-sm mt-2 ml-6 text-xs">
                     <span className="text-green-400 text-xs">
                       <i className="fas fa-check-circle" />
                     </span>{" "}
-                    Balo thời trang + túi chống sốc cao cấp
+                    Fashionable backpack + high-quality shockproof bag
                   </p>
                   <p className="text-sm mt-2 ml-6 text-xs">
                     <span className="text-green-400 text-xs">
                       <i className="fas fa-check-circle" />
                     </span>{" "}
-                    Chuột không dây + Bàn di cao cấp chính hãng
+                    Wireless mouse + genuine high-quality touchpad
                   </p>
                   <p className="text-sm mt-2 ml-6 text-xs">
                     <span className="text-green-400 text-xs">
                       <i className="fas fa-check-circle" />
                     </span>{" "}
-                    Tặng gói cài đặt, bảo dưỡng chăm sóc máy trọn đời
+                    Free installation package, maintenance and machine care for life
                   </p>
                   <p className="text-sm mt-2 ml-6 text-xs">
                     <span className="text-green-400 text-xs">
                       <i className="fas fa-check-circle" />
                     </span>{" "}
-                    Tặng Voucher giảm giá cho lần mua tiếp theo
+                    Get a discount voucher for your next purchase
                   </p>
                 </div>
               </div>
@@ -180,37 +182,37 @@ const ProductDetail = () => {
                   style={{ width: "350px" }}
                 >
                   <h4 className="text-base text-center text-red-500 mt-[7px]">
-                    YÊN TÂM MUA SẮM TẠI LAPTOPAZ
+                    SHOPPING WITH PEACE AT LAPTOPAZ
                   </h4>
                   <p className="text-sm mt-[6px] ml-3 text-base">
                     <span className="text-yellow-500 text-base mr-2">
                       <i className="fas fa-star" />
                     </span>{" "}
-                    Chất lượng sản phẩm là hàng đầu
+                    Product quality is top
                   </p>
                   <p className="text-sm mt-[6px] ml-3 text-base">
                     <span className="text-yellow-500 text-base mr-2">
                       <i className="fas fa-star" />
                     </span>{" "}
-                    Dùng test máy 15 ngày đầu lỗi 1 đổi 1
+                    Tested the device for the first 15 days
                   </p>
                   <p className="text-sm mt-[6px] ml-3 text-base">
                     <span className="text-yellow-500 text-base mr-2">
                       <i className="fas fa-star" />
                     </span>{" "}
-                    Hỗ trợ và hậu mãi sau bán hàng tốt nhất
+                    Best after-sales support and service
                   </p>
                   <p className="text-sm mt-[6px] ml-3 text-base">
                     <span className="text-yellow-500 text-base mr-2">
                       <i className="fas fa-star" />
                     </span>{" "}
-                    Trả góp lãi suất 0% qua thẻ visa
+                    Pay in 0% interest installments via visa card
                   </p>
                   <p className="text-sm mt-[6px] ml-3 text-base">
                     <span className="text-yellow-500 text-base mr-2">
                       <i className="fas fa-star" />
                     </span>{" "}
-                    Giao hàng toàn quốc nhanh nhất
+                    Fastest nationwide delivery
                   </p>
                 </div>
               </div>
@@ -218,7 +220,7 @@ const ProductDetail = () => {
           </div>
         </div>
         <div className="mt-8 mx-auto bg-white shadow-md" style={{ width: "1200px" }}>
-          <h4 className="font-bold text-lg mt-4 pl-4 py-2 border-b">Sản phẩm liên quan</h4>
+          <h4 className="font-bold text-lg mt-4 pl-4 py-2 border-b">Related products</h4>
           <div className="mx-auto grid grid-cols-3 gap-8 text-center mt-8 pb-8 px-8">
             {productsRelated.map(item => {
               return <ProductItem key={item._id} product={item} className="" />;

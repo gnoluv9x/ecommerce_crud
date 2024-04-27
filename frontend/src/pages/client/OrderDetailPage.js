@@ -46,25 +46,23 @@ const OrderDetailPage = () => {
           <div className="pt-2 pl-3">
             <h5 className="py-3">
               <i className="fas fa-clipboard-list px-1"></i>
-              <Link to="/order">Đơn hàng</Link>
+              <Link to="/order">Order</Link>
               <i className="fas fa-angle-double-right text-xs px-1" />
               <i className="fas fa-info-circle px-1"></i>
-              Chi tiết
+              Detail
             </h5>
           </div>
           <div className="grid grid-cols-6 gap-3 pb-4">
-            <div className="col-span-2 text-left">
-              <h4 className="text-left text-2xl font-semibold border-b py-2">
-                Thông tin người mua hàng
-              </h4>
+            <div className="col-span-2 text-left border-r pr-4">
+              <h4 className="text-left text-2xl font-semibold border-b py-2">Buyer information</h4>
               <div className="mt-2">
                 <div>
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
-                    <span className="font-semibold">Họ và tên:</span>{" "}
+                    <span className="font-semibold">Full name:</span>{" "}
                     <span>{order && order.name}</span>
                   </p>
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
-                    <span className="font-semibold">Địa chỉ:</span>{" "}
+                    <span className="font-semibold">Address:</span>{" "}
                     <span>{order && order.address}</span>
                   </p>
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
@@ -76,7 +74,7 @@ const OrderDetailPage = () => {
                     <span>{order && order.email}</span>
                   </p>
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
-                    <span className="font-semibold">Ngày đặt:</span>{" "}
+                    <span className="font-semibold">Placement date:</span>{" "}
                     <span>
                       {order && order.createdAt
                         ? dayjs(order.createdAt).format("HH:mm:ss DD/MM/YYYY")
@@ -84,21 +82,21 @@ const OrderDetailPage = () => {
                     </span>
                   </p>
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
-                    <span className="font-semibold">Số sản phẩm:</span>{" "}
+                    <span className="font-semibold">Product number:</span>{" "}
                     <span>{order && order.cartNumber}</span>
                   </p>
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
-                    <span className="font-semibold">Ghi chú: </span> {order && order.note}
+                    <span className="font-semibold">Note: </span> {order && order.note}
                   </p>
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
-                    <span className="font-semibold">Trạng thái:</span>{" "}
+                    <span className="font-semibold">Status:</span>{" "}
                     <span>
                       {order?.status
                         ? order?.status === "success"
-                          ? "Thành công"
+                          ? "Success"
                           : order?.status === "pending"
-                          ? "Chờ duyệt"
-                          : "Huỷ"
+                          ? "Pending"
+                          : "Cancel"
                         : ""}
                       {order.status === "pending" && (
                         <span className="text-[#F29339] pl-2">
@@ -118,14 +116,14 @@ const OrderDetailPage = () => {
                     </span>
                   </p>
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
-                    <span className="font-semibold">Trạng thái thanh toán:</span>{" "}
+                    <span className="font-semibold">Payment status:</span>{" "}
                     <span>
                       {order?.checkoutStatus
                         ? order?.checkoutStatus === "success"
-                          ? "Thành công"
+                          ? "Success"
                           : order?.checkoutStatus === "pending"
-                          ? "Chưa thanh toán"
-                          : "Huỷ"
+                          ? "Unpaid"
+                          : "Cancel"
                         : ""}
                       {order.checkoutStatus === "success" && (
                         <span className="text-green-500 pl-2">
@@ -145,24 +143,26 @@ const OrderDetailPage = () => {
                     </span>
                   </p>
                   <p className="mt-3 flex justify-between border-bottom border-[#aaaaaa]">
-                    <span className="font-semibold">Tổng tiền:</span>{" "}
+                    <span className="font-semibold">Total amount:</span>{" "}
                     <span className="font-bold text-red-500">
-                      {prices(Number(order && order.totalPrice)).replace("VND", "₫")}
+                      {prices(Number(order && order.totalPrice)).replace("VND", "VND")}
                     </span>
                   </p>
                 </div>
               </div>
             </div>
             <div className="col-span-4 ">
-              <h4 className="text-left text-2xl font-semibold py-2 border-b">Thông tin sản phẩm</h4>
+              <h4 className="text-left text-2xl font-semibold py-2 border-b">
+                Product information
+              </h4>
               <table className="mx-auto text-center table table-hover">
                 <thead>
                   <tr className="text-center">
                     <th className="w-[10%]">STT</th>
-                    <th className="w-[40%]">Tên sản phẩm</th>
-                    <th className="w-[15%]">Đơn giá</th>
-                    <th className="w-[15%]">Số lượng</th>
-                    <th className="w-[20%]">Thành tiền</th>
+                    <th className="w-[40%]">Product name</th>
+                    <th className="w-[15%]">Unit price</th>
+                    <th className="w-[15%]">Quantity</th>
+                    <th className="w-[20%]">Amount of money</th>
                   </tr>
                 </thead>
                 <tbody>

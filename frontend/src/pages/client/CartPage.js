@@ -72,7 +72,7 @@ const CartPage = () => {
       .unwrap()
       .then(result => {
         if (result.paymentMethod === "cod") {
-          SuccessMessage("Đặt hàng thành công!", 2000);
+          SuccessMessage("Order Success!", 2000);
 
           localStorage.removeItem("cart");
           localStorage.removeItem("cartNumber");
@@ -109,7 +109,7 @@ const CartPage = () => {
       })
       .catch(err => {
         console.log("Debug_here err: ", err);
-        ErrorMessage("Tạo đơn hàng thất bại");
+        ErrorMessage("Order creation failed");
       });
   };
 
@@ -117,7 +117,7 @@ const CartPage = () => {
     const currentCardItem = productOnCart.find(item => item.id === itemId);
 
     if (!currentCardItem) {
-      WarningMessage("Sản phẩm không tồn tại trong giỏ hàng");
+      WarningMessage("The product does not exist in the shopping cart");
       return;
     }
 
@@ -195,11 +195,11 @@ const CartPage = () => {
       {productOnCart === null ? (
         <div>
           <div className="text-center text-4xl font-semibold pt-32 pb-4">
-            Bạn chưa thêm sản phẩm nào vào giỏ hàng <i className="far fa-frown" />
+            You have not added any products to your cart <i className="far fa-frown" />
           </div>
           <div className="text-center mb-32">
             <Link to="/" className="btn btn-primary">
-              Trang chủ
+              Homepage
             </Link>
           </div>
         </div>
@@ -210,28 +210,28 @@ const CartPage = () => {
               <div className="flex justify-between items-center py-2">
                 <h5 className="py-3 font-semibold">
                   <i className="fas fa-home px-1"></i>
-                  <Link to="/">Trang chủ</Link>
+                  <Link to="/">Homepage</Link>
                   <i className="fas fa-angle-double-right text-xs px-1" />
                   <i className="fas fa-shopping-cart px-1"></i>
-                  <Link to="/cart">Giỏ hàng</Link>
+                  <Link to="/cart">Cart</Link>
                 </h5>
               </div>
               <div id="list_cart">
                 <div>
                   <div onClick={removeCart} className="text-right mb-2">
                     <button id="removeCart" className="btn btn-danger">
-                      Xoá giỏ hàng
+                      Delete cart
                     </button>
                   </div>
                   <table>
                     <thead>
                       <tr className="text-center">
                         <th className="border border-gray-300 w-[100px]">STT</th>
-                        <th className="border border-gray-300 w-[650px]">Tên sản phẩm</th>
-                        <th className="border border-gray-300 w-[200px]">Đơn giá</th>
-                        <th className="border border-gray-300 w-[100px]">Số lượng</th>
-                        <th className="border border-gray-300 w-[200px]">Thành tiền</th>
-                        <th className="border border-gray-300 w-[100px]">Xoá</th>
+                        <th className="border border-gray-300 w-[650px]">Product name</th>
+                        <th className="border border-gray-300 w-[200px]">Unit price</th>
+                        <th className="border border-gray-300 w-[100px]">Quantity</th>
+                        <th className="border border-gray-300 w-[200px]">Money wall</th>
+                        <th className="border border-gray-300 w-[100px]">Delete</th>
                       </tr>
                     </thead>
                     <tbody id="showListCart">
@@ -295,7 +295,7 @@ const CartPage = () => {
                         <td colSpan={2} className="border border-gray-400" />
                         <td colSpan={4} className="border border-gray-400">
                           <p className="text-red-500 font-bold my-3 ml-3 text-lg text-right pr-[100px] uppercase">
-                            Tổng tiền: <span id="totalCost" />
+                            Total: <span id="totalCost" />
                             {prices(Number(totalPrice)).replace("VND", "₫")}
                           </p>
                         </td>
@@ -304,18 +304,18 @@ const CartPage = () => {
                   </table>
                   <div className="flex justify-end mt-4 pb-4">
                     <Link to="/">
-                      <button className="btn btn-primary mr-4">Tiếp tục mua hàng</button>
+                      <button className="btn btn-primary mr-4">Continue shopping</button>
                     </Link>
                     {user ? (
                       <div>
                         <button onClick={toggle} id="btn_order" className="btn btn-primary">
-                          Đặt hàng
+                          Order
                         </button>
                       </div>
                     ) : (
                       <div>
                         <button onClick={alertLogin} id="alertOder" className="btn btn-danger">
-                          Đăng nhập để đặt hàng
+                          Log in to order
                         </button>
                       </div>
                     )}
@@ -340,46 +340,46 @@ const CartPage = () => {
                         </h3>
                       </div>
                       <div className="ml-5">
-                        <h4 className="text-base mt-4 font-semibold">Thông tin người mua</h4>
-                        <p className="text-sm mt-1">Những phần đánh dấu * là bắt buộc</p>
-                        <div className="flex  mt-4">
-                          <p style={{ minWidth: "120px" }}>Họ tên *</p>
+                        <h4 className="text-base mt-4 font-semibold">Buyer information</h4>
+                        <p className="text-sm mt-1">Parts marked * are required</p>
+                        <div className="flex mt-4">
+                          <p style={{ minWidth: "120px" }}>Full name *</p>
                           <input
                             type="text"
                             {...register("name", { required: true })}
                             className="form-control checkValidate"
                             id="fullname"
-                            placeholder="Nguyễn Văn A"
+                            placeholder="Nguyen Van A"
                             style={{ width: "420px", height: "30px" }}
                           />
                         </div>
                         <div>
                           {errors.name && (
                             <span className="text-red-500 font-semibold ml-[120px]">
-                              Hãy nhập đầy đủ thông tin!
+                              Please enter complete information!
                             </span>
                           )}
                         </div>
                         <div className="flex mt-4">
-                          <p style={{ minWidth: "120px" }}>Địa chỉ*</p>
+                          <p style={{ minWidth: "120px" }}>Address*</p>
                           <input
                             type="text"
                             {...register("address", { required: true })}
                             className="form-control checkValidate"
                             id="address"
-                            placeholder="Số 165 - Cầu Giấy - Quận Cầu Giấy - Hà Nội"
+                            placeholder="No. 165 - Cau Giay - Cau Giay District - Hanoi"
                             style={{ width: "420px", height: "30px" }}
                           />
                         </div>
                         <div>
                           {errors.address && (
                             <span className="text-red-500 font-semibold ml-[120px]">
-                              Hãy nhập đầy đủ thông tin!
+                              Please enter complete information!
                             </span>
                           )}
                         </div>
                         <div className="flex mt-4">
-                          <p style={{ minWidth: "120px" }}>Số điện thoại*</p>
+                          <p style={{ minWidth: "120px" }}>Phone number*</p>
                           <input
                             type="number"
                             {...register("phoneNumber", { required: true })}
@@ -392,7 +392,7 @@ const CartPage = () => {
                         <div>
                           {errors.phoneNumber && (
                             <span className="text-red-500 font-semibold ml-[120px]">
-                              Hãy nhập đầy đủ thông tin!
+                              Please enter complete information!
                             </span>
                           )}
                         </div>
@@ -410,7 +410,7 @@ const CartPage = () => {
                         <div>
                           {errors.email && (
                             <span className="text-red-500 font-semibold ml-[120px]">
-                              Hãy nhập đầy đủ thông tin!
+                              Please enter complete information!
                             </span>
                           )}
                         </div>
@@ -422,10 +422,10 @@ const CartPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-span-2 ">
+                    <div className="col-span-2">
                       <div>
                         <div className="border-t border-l border-r pt-1 px-3">
-                          <h3 className="text-lg pb-1 font-semibold">2. Ghi chú cho đơn hàng</h3>
+                          <h3 className="text-lg pb-1 font-semibold">2. Notes for orders</h3>
                         </div>
                         <div className="p-2 border">
                           <textarea
@@ -437,17 +437,15 @@ const CartPage = () => {
                           <div>
                             {errors.note && (
                               <span className="text-red-500 font-semibold">
-                                Hãy nhập đầy đủ thông tin!
+                                Please enter complete information!
                               </span>
                             )}
                           </div>
                         </div>
                       </div>
-                      <div className="mt-4 ">
+                      <div className="mt-4">
                         <div className="border-t border-l border-r pt-1 px-3">
-                          <h3 className="text-lg pb-1 font-semibold">
-                            3. Chọn phương thức thanh toán
-                          </h3>
+                          <h3 className="text-lg pb-1 font-semibold">3. Choose payment method</h3>
                         </div>
                         <div className="p-3 border">
                           <div className="mt-1 flex gap-1 items-center cursor-pointer">
@@ -459,7 +457,7 @@ const CartPage = () => {
                               {...register("paymentMethod", { required: true })}
                             />
                             <label className="cursor-pointer" for="vnpay">
-                              Cổng thanh toán VNPAYQR
+                              VNPAYQR payment gateway
                             </label>
                           </div>
                           <div className="mt-1 flex gap-1 items-center cursor-pointer">
@@ -470,7 +468,7 @@ const CartPage = () => {
                               {...register("paymentMethod", { required: true })}
                             />
                             <label className="cursor-pointer" for="atm">
-                              Thanh toán qua ATM-Tài khoản ngân hàng nội địa
+                              Payment via ATM-Domestic bank account
                             </label>
                           </div>
                           <div className="mt-1 flex gap-1 items-center cursor-pointer">
@@ -481,7 +479,7 @@ const CartPage = () => {
                               {...register("paymentMethod", { required: true })}
                             />
                             <label className="cursor-pointer" for="cod">
-                              Thanh toán khi nhận hàng (COD)
+                              Payment upon delivery (COD)
                             </label>
                           </div>
                         </div>
@@ -490,7 +488,7 @@ const CartPage = () => {
                         <input
                           type="submit"
                           className="btn btn-primary py-2 uppercase"
-                          value="Tạo đơn"
+                          value="Create order"
                         />
                       </div>
                     </div>

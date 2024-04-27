@@ -8,10 +8,10 @@ export const prices = x => {
   }));
 };
 
-export const ErrorMessage = (error, duration = 500) => toast.error(error, { autoClose: duration });
-export const SuccessMessage = (success, duration = 500) =>
+export const ErrorMessage = (error, duration = 1000) => toast.error(error, { autoClose: duration });
+export const SuccessMessage = (success, duration = 1000) =>
   toast.success(success, { autoClose: duration });
-export const WarningMessage = (warning, duration = 500) =>
+export const WarningMessage = (warning, duration = 1000) =>
   toast.warning(warning, { autoClose: duration });
 
 export const isAuthenticated = () => {

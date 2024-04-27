@@ -1,18 +1,17 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
-import { Product_create } from "../../../slice/productSlice";
-import { SuccessMessage } from "../../../utils/util";
-import "../../../firebase/index";
 import {
+  getDownloadURL,
   getStorage,
   ref,
   uploadBytes,
-  getDownloadURL,
   uploadBytesResumable,
 } from "@firebase/storage";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import "../../../firebase/index";
+import { Product_create } from "../../../slice/productSlice";
+import { SuccessMessage } from "../../../utils/util";
 
 const ProductAddPage = () => {
   const {

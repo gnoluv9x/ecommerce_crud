@@ -15,8 +15,8 @@ const OrderPage = () => {
 
   const confirmRemove = item => {
     confirmAlert({
-      title: "XÁC NHẬN?",
-      message: "Bạn có chắc chắn muốn huỷ đơn hàng này?",
+      title: "CONFIRM?",
+      message: "Are you sure you want to cancel this order??",
       buttons: [
         {
           label: "Yes",
@@ -25,7 +25,7 @@ const OrderPage = () => {
               .unwrap()
               .then(() => {
                 navigate("/order");
-                SuccessMessage("Huỷ đơn hàng thành công");
+                SuccessMessage("Order canceled successfully");
               });
           },
         },
@@ -54,22 +54,22 @@ const OrderPage = () => {
           <div className="pt-2">
             <h5 className="py-3 font-semibold">
               <i className="fas fa-home px-1"></i>
-              <Link to="/">Trang chủ</Link>
+              <Link to="/">Homepage</Link>
 
               <i className="fas fa-angle-double-right text-xs px-1" />
               <i className="fas fa-clipboard-list px-1"></i>
-              <Link to="/order">Đơn hàng</Link>
+              <Link to="/order">Order</Link>
             </h5>
           </div>
           <div className="mt-4">
             {orders.length === 0 ? (
               <div>
                 <div className="text-center text-4xl font-semibold pt-32 pb-4">
-                  Bạn chưa có đơn hàng nào <i className="far fa-frown" />
+                  You don't have any orders yet <i className="far fa-frown" />
                 </div>
                 <div className="text-center mb-32">
                   <Link to="/" className="btn btn-primary">
-                    Mua ngay
+                    Buy now
                   </Link>
                 </div>
               </div>
@@ -79,13 +79,13 @@ const OrderPage = () => {
                   <thead>
                     <tr className="text-center">
                       <th className="w-[5%]">STT</th>
-                      <th className="w-[20%]">Họ và tên</th>
-                      <th className="w-[10%]">Số điện thoại</th>
-                      <th className="w-[10%]">Tổng tiền</th>
-                      <th className="w-[10%]">Ngày đặt hàng</th>
-                      <th className="w-[10%]">Trạng thái</th>
-                      <th className="w-[15%]">Trạng thái thanh toán</th>
-                      <th className="w-[10%]">Tuỳ chọn</th>
+                      <th className="w-[20%]">Full name</th>
+                      <th className="w-[10%]">Phone number</th>
+                      <th className="w-[10%]">Total amount</th>
+                      <th className="w-[10%]">Order date</th>
+                      <th className="w-[10%]">Status</th>
+                      <th className="w-[15%]">Payment Status</th>
+                      <th className="w-[10%]">Options</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -100,7 +100,7 @@ const OrderPage = () => {
                             <span>{item.phoneNumber}</span>
                           </td>
                           <td className="align-middle">
-                            <span>{prices(item.totalPrice).replace("VND", "₫")}</span>
+                            <span>{prices(item.totalPrice).replace("VND", "VND")}</span>
                           </td>
                           <td className="align-middle">
                             <span className="break-words">
@@ -112,10 +112,10 @@ const OrderPage = () => {
                           <td className="align-middle">
                             <span>
                               {item.status === "pending"
-                                ? "Chờ duyệt"
+                                ? "Pending"
                                 : item.status === "success"
-                                ? "Thành công"
-                                : "Huỷ"}
+                                ? "Success"
+                                : "Cancel"}
                             </span>
                             <span className="checkStatus">
                               {item.status === "pending" ? (
@@ -136,10 +136,10 @@ const OrderPage = () => {
                           <td className="align-middle">
                             <span>
                               {item.checkoutStatus === "pending"
-                                ? "Chưa thanh toán"
+                                ? "Unpaid"
                                 : item.checkoutStatus === "success"
-                                ? "Thành công"
-                                : "Huỷ"}
+                                ? "Success"
+                                : "Cancel"}
                             </span>
                             <span className="checkStatus">
                               {item.checkoutStatus === "pending" && (

@@ -4,10 +4,16 @@ import categoryApi from "../../api/categoryApi";
 import productApi from "../../api/productApi";
 import Categories from "../../components/client/Categories";
 import ListProduct from "../../components/client/ListProduct";
+import { useDispatch } from "react-redux";
+import { Category_list } from "../../slice/categorySlice";
 
 export default function CategoryPage() {
   const { id: idCategory } = useParams();
+  const dispatch = useDispatch();
+
   const [category, setCategory] = useState("");
+  const [productsByCategory, setProductsByCategory] = useState([]);
+
   useEffect(() => {
     const getCategory = async () => {
       const { data } = await categoryApi.read(idCategory);
@@ -16,7 +22,6 @@ export default function CategoryPage() {
     getCategory();
   }, [idCategory]);
 
-  const [productsByCategory, setProductsByCategory] = useState([]);
   useEffect(() => {
     const getProductsByCategory = async () => {
       const { data } = await productApi.productByCategory(idCategory);
@@ -24,6 +29,10 @@ export default function CategoryPage() {
     };
     getProductsByCategory();
   }, [idCategory]);
+
+  useEffect(() => {
+    dispatch(Category_list());
+  }, []);
 
   return (
     <>
@@ -47,7 +56,7 @@ export default function CategoryPage() {
           <div className="col-span-3">
             <h5 className="mt-1">
               <span>
-                <i className="fas fa-laptop" /> Sản phẩm
+                <i className="fas fa-laptop" /> Product
               </span>
               <i className="fas fa-angle-double-right text-xs px-1" />
               <span className="text-blue-600 font-semibold text-sm">{category.name}</span>
@@ -58,12 +67,12 @@ export default function CategoryPage() {
               ) : (
                 <div className=" text-center mx-48 mt-20">
                   <div className="text-4xl font-semibold">
-                    Không có sản phẩm <i className="far fa-sad-tear"></i>
+                    No products <i className="far fa-sad-tear"></i>
                   </div>
                   <div className="mt-[20px]">
                     <Link to="/">
                       <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 border border-blue-700 rounded">
-                        Trang chủ
+                        Homepage
                       </button>
                     </Link>
                   </div>

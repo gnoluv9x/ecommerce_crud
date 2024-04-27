@@ -14,7 +14,7 @@ const Categories = () => {
           <span>
             <i className="fas fa-bars" />
           </span>
-          <span className="pl-4 font-semibold">Danh mục</span>
+          <span className="pl-4 font-semibold">Categories</span>
         </h2>
         <ul>
           <li>

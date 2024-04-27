@@ -8,7 +8,9 @@ const ProductItem = ({ product }) => {
   return (
     <div className="group overflow-hidden shadow-md bg-white relative">
       {isSoldOut && (
-        <div className="text-white bg-red-400 px-3 py-2 absolute top-0 right-0 z-10">Hết hàng</div>
+        <div className="text-white bg-red-400 px-3 py-2 absolute top-0 right-0 z-10">
+          Out of stock
+        </div>
       )}
       <div className="bg-white overflow-hidden flex flex-col">
         <div className="py-2 h-[55%] flex justify-center items-center flex-shrink-0">
@@ -46,15 +48,13 @@ const ProductItem = ({ product }) => {
                     product.quantity
                   );
 
-                  SuccessMessage("Thêm sản phẩm vào giỏ hàng thành công!");
+                  SuccessMessage("Added to cart successfully!");
                 } else {
-                  WarningMessage("Sản phẩm đã hết hàng, vui lòng chọn sản phẩm khác!");
+                  WarningMessage("The product is out of stock, please choose another product!");
                 }
               }}
-
-              // onClick={(e) => { onHandleAddToCart(e) }}
             >
-              THÊM GIỎ HÀNG
+              ADD TO CART
             </button>
           )}
         </div>

@@ -2,11 +2,11 @@ import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Dashboard_report, Dashboard_summary } from "../../../slice/dashboardSlice";
+import DashboardSummary from "./components/DashboardSummary";
 import DashboardFilters from "./components/Filters";
+import OrderRate from "./components/OrderRate";
 import OrdersBarChart from "./components/OrdersBarChart";
 import PricesBarChart from "./components/PricesBarChart";
-import DashboardSummary from "./components/DashboardSummary";
-import OrderRate from "./components/OrderRate";
 
 const DashboardReport = () => {
   const dispatch = useDispatch();

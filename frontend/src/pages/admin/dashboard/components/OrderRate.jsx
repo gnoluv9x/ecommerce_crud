@@ -2,8 +2,8 @@ import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import React, { useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
-import { getPercentageOfAItem } from "../helper";
 import { useSelector } from "react-redux";
+import { getPercentageOfAItem } from "../helper";
 
 ChartJS.register(ArcElement);
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import productApi from "../../api/productApi";
 import Banner from "../../components/client/Banner";
 import Categories from "../../components/client/Categories";
 import ListProduct from "../../components/client/ListProduct";
-import { useDispatch } from "react-redux";
 import { Category_list } from "../../slice/categorySlice";
 import { Product_list } from "../../slice/productSlice";
 import { ErrorMessage } from "../../utils/util";
@@ -45,7 +45,7 @@ export default function HomePage() {
   };
   return (
     <>
-      <Banner></Banner>
+      <Banner />
       <div className="content bg-gray-100 pb-8 pt-8" id="content">
         <div className=" mx-auto grid grid-cols-4 gap-8" style={{ width: "1200px" }}>
           <aside className="col-span-1 bg-gray-100">
@@ -58,7 +58,7 @@ export default function HomePage() {
               />
               <img
                 className="shadow-md mt-10 transition duration-500 ease-in-out transform hover:scale-95"
-                src="https://laptopaz.vn/media/banner/11_Oct876d50f755e454ecda95d81a959c3685.jpg"
+                src="https://shop.samsung.com/ie/images/categories/28020669/Category-Banner-Mobile-750x860%20(37).jpg"
                 alt=""
               />
             </div>
@@ -71,9 +71,9 @@ export default function HomePage() {
                 id="sort"
                 style={{ width: "240px" }}
               >
-                <option value="asc"> --- Sắp xếp sản phẩm --- </option>
-                <option value="asc">Giá từ thấp đến cao</option>
-                <option value="desc">Giá từ cao đến thấp</option>
+                <option value="asc"> --- Sort products --- </option>
+                <option value="asc">Price from low to high</option>
+                <option value="desc">Price from high to low</option>
               </select>
               <select
                 onChange={handleFilter}
@@ -81,11 +81,11 @@ export default function HomePage() {
                 id="filter"
                 style={{ width: "250px" }}
               >
-                <option value="0-990000000"> --- Lọc sản phẩm theo giá --- </option>
-                <option value="0-15000000">Dưới 15 triệu đồng</option>
-                <option value="15000000-30000000">15 triệu - 30 triệu</option>
-                <option value="30000000-40000000">30 triệu - 40 triệu</option>
-                <option value="40000000-990000000">Trên 40 triệu đồng</option>
+                <option value="0-990000000"> --- Filter products by price --- </option>
+                <option value="0-15000000">Under 15 million VND</option>
+                <option value="15000000-30000000">15 million - 30 million</option>
+                <option value="30000000-40000000">30 million - 40 million</option>
+                <option value="40000000-990000000">Over 40 million VND</option>
               </select>
             </div>
             <div id="list_product">

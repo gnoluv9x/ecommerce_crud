@@ -23,7 +23,7 @@ export default function SearchPage() {
   return (
     <>
       <div className="content bg-gray-100 pb-8" id="content">
-        <div className=" mx-auto grid grid-cols-4 gap-8 pt-5" style={{ width: "1200px" }}>
+        <div className=" mx-auto grid grid-cols-4 gap-8 pt-5 w-[1200px]">
           <aside className="col-span-1 bg-gray-100">
             <Categories></Categories>
             <div id="sticky" className="mt-8 sticky top-[30px]">
@@ -42,7 +42,7 @@ export default function SearchPage() {
           <div className="col-span-3">
             <h5 className="mt-1">
               <span>
-                <i className="fas fa-search"></i> Tìm kiếm
+                <i className="fas fa-search"></i> Search
               </span>
               :<span className="text-blue-600 font-semibold text-base"> {textSearch}</span>
             </h5>
@@ -52,12 +52,12 @@ export default function SearchPage() {
               ) : (
                 <div className=" text-center mx-48 mt-20">
                   <div className="text-4xl font-semibold">
-                    Không tìm thấy sản phẩm <i className="far fa-sad-tear"></i>
+                    No products found <i className="far fa-sad-tear"></i>
                   </div>
                   <div className="mt-[20px]">
                     <Link to="/">
                       <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 border border-blue-700 rounded">
-                        Trang chủ
+                        Homepage
                       </button>
                     </Link>
                   </div>

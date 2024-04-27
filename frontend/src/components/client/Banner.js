@@ -11,74 +11,74 @@ const Banner = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    pauseOnHover: true,
   };
 
   return (
     <div className="bg-gray-100">
       <div className=" w-[1200px] grid grid-cols-3 mx-auto">
         <Slider className="col-span-2" {...settings}>
-          <div>
+          <div className="h-full">
             <Link to="/">
               <img
                 className="w-full"
-                src="https://laptopaz.vn/media/banner/29_Aug501f25e647a66cf79fd77f50ef4cf460.jpg"
+                src="https://laptopaz.vn/media/banner/18_Mare95ffd274c039d51bb5b9fa0e7e5dbef.jpg"
+                alt="banner"
+              />
+            </Link>
+          </div>
+          <div className="h-full">
+            <Link to="/">
+              <img
+                className="w-full"
+                src="https://pbs.twimg.com/media/Fxa1YWiakAAlvpg.jpg"
                 alt=""
               />
             </Link>
           </div>
-          <div>
+          <div className="h-full">
             <Link to="/">
               <img
                 className="w-full"
-                src="https://laptopaz.vn/media/banner/30_Jan706d314d1fb9aa646d546ecca9b36485.jpg"
+                src="https://laptopaz.vn/media/banner/26_Apr767cc1af5767401ee423d76bc9ff4775.jpg"
                 alt=""
               />
             </Link>
           </div>
-          <div>
+          <div className="h-full">
             <Link to="/">
               <img
                 className="w-full"
-                src="https://laptopaz.vn/media/banner/31_Jan8e7276c8ba31fc1ed7c1676ff701a365.png"
+                src="https://www.tech-critter.com/wp-content/uploads/2022/06/MSI-Mid-Year-Sales-26-May-to-26-June-2022-featured.jpg"
                 alt=""
               />
             </Link>
           </div>
-          <div>
+          <div className="h-full">
             <Link to="/">
               <img
                 className="w-full"
-                src="https://laptopaz.vn/media/banner/01_Feb7803ca9beee4c232fe0ed7c9035f6f8d.jpg"
-                alt=""
-              />
-            </Link>
-          </div>
-          <div>
-            <Link to="/">
-              <img
-                className="w-full"
-                src="https://laptopaz.vn/media/banner/03_Feb618b94a4eaf907a4f5fd7d2f36e6887b.jpg"
+                src="https://laptopaz.vn/media/banner/22_Marf1a391c8c48fca0c805c17e2c743086c.jpg"
                 alt=""
               />
             </Link>
           </div>
         </Slider>
-        <div className="col-span-1 z-50">
-          {/* <div>
-                    <iframe width="100%" height={185} src="https://www.youtube.com/embed/lNbgB_PNYN8" title="YouTube video player" frameBorder={0} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-                </div> */}
-          <div>
+        <div className="col-span-1 z-50 flex flex-col pb-3">
+          <div className="flex-grow-1">
             <img
-              src="https://laptopaz.vn/media/banner/14_Oct2abfc06f2548c018b6afe6bf064f3ab2.jpg"
+              src="https://t4.ftcdn.net/jpg/04/19/98/19/360_F_419981971_jftDSPRJGskIgVirQqtKLItcFdEZ4Zve.jpg"
               alt=""
-              style={{ height: "185px", width: "100%" }}
+              className="w-full h-full object-fill"
             />
           </div>
-          <div>
+          <div className="flex-grow-1">
             <img
-              src="https://laptopaz.vn/media/banner/13_Oct2d10cdfdfc80145ac11dc99f38a937ba.jpg"
+              src="https://img.freepik.com/free-vector/realistic-cyber-monday-twitter-header_23-2149816807.jpg?size=626&ext=jpg"
               alt=""
-              style={{ height: "185px", width: "100%" }}
+              className="w-full h-full object-fill"
             />
           </div>
         </div>

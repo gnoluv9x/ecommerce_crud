@@ -6,15 +6,14 @@ import {
   uploadBytesResumable,
 } from "@firebase/storage";
 import React, { useEffect } from "react";
-import Spin from "react-cssfx-loading/lib/Spin";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import productApi from "../../../api/productApi";
+import Spinner from "../../../components/admin/Spinner";
 import "../../../firebase/index";
 import { Product_read, Product_update } from "../../../slice/productSlice";
 import { SuccessMessage } from "../../../utils/util";
-import Spinner from "../../../components/admin/Spinner";
 
 const ProductUpdatePage = () => {
   const {

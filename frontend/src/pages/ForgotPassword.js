@@ -17,7 +17,6 @@ function FotgotPassword() {
   const navigate = useNavigate();
 
   const forgotPasswordLoading = useSelector(state => state.auth.forgotpassword.loading);
-  console.log("Debug_here forgotPasswordLoading: ", forgotPasswordLoading);
 
   const onSubmit = data => {
     dispatch(ForgotPassword(data))
@@ -35,11 +34,6 @@ function FotgotPassword() {
       });
   };
 
-  const handleForgotPassword = event => {
-    event.stopPropagation();
-    navigate("/signin");
-  };
-
   useEffect(() => {
     const user = Cookies.get("accessToken");
     if (user) {
@@ -50,10 +44,9 @@ function FotgotPassword() {
   return (
     <div className="container mx-auto bg-gray-200 border border-gray-300 mt-32 max-w-[600px]">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h2 className="text-center pt-5 text-3xl font-semibold">QUÊN MẬT KHẨU</h2>
+        <h2 className="text-center pt-5 text-3xl font-semibold">FORGOT PASSWORD</h2>
         <div className="mx-4 mt-3 text-center text-gray-600">
-          Vui lòng điền email bạn muốn lấy mật khẩu, chúng tôi sẽ gửi mật khẩu mới cho bạn vào email
-          này.
+          Please fill in the email you want to reset your password, we will send you a new password.
         </div>
         <div className="ml-32">
           <p className="mb-1">
@@ -68,7 +61,7 @@ function FotgotPassword() {
             type="email"
             id="email"
           />
-          {errors.email && <p className="text-red-500 font-bold">Hãy nhập email!</p>}
+          {errors.email && <p className="text-red-500 font-bold">Please enter email!</p>}
         </div>
         <div className="text-center">
           <button
@@ -96,28 +89,26 @@ function FotgotPassword() {
                 />
               </svg>
             )}
-            Gửi yêu cầu
+            Send request
           </button>
         </div>
         <div className="text-center">
           <Link to="/" className="hover:text-gray-300">
             <span className="mb-5 px-5 py-1 rounded-lg font-semibold bg-blue-500 mx-auto btn btn-primary">
-              Trở về trang chủ
+              Back to homepage
             </span>
           </Link>
         </div>
         <div className="text-center border-t border-gray-300 grid grid-cols-2">
           <div className="hover:bg-gray-300 py-2 border-r border-gray-300 ">
-            <button type="button">
-              <Link to="/signup" className="font-semibold">
-                Đăng ký tài khoản
-              </Link>
-            </button>
+            <Link to="/signup" className="font-semibold w-full h-full inline-block">
+              Signup
+            </Link>
           </div>
           <div className="hover:bg-gray-300 py-2">
-            <button type="button" onClick={handleForgotPassword} className="font-semibold">
-              Đăng nhập
-            </button>
+            <Link to="/signin" className="font-semibold w-full h-full inline-block">
+              Signin
+            </Link>
           </div>
         </div>
       </form>
