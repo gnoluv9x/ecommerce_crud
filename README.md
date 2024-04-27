@@ -1,4 +1,4 @@
-![Alt text](relative%20frontend/public/wow.png?raw=true "LaptopAZ")
+![alt text](https://www.text-image.com/convert/temp/1714212107-183.81.11.95.png)
 
 1. Frontend:
 
