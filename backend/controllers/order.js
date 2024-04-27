@@ -46,7 +46,7 @@ export const orderById = (req, res, next, id) => {
   Order.findById(id).exec((err, order) => {
     if (err || !order) {
       res.status(404).json({
-        error: "Không tìm thấy đơn hàng!",
+        error: "Order not found!",
       });
     }
     req.order = order;
@@ -61,12 +61,12 @@ export const remove = (req, res) => {
   order.remove((err, deletedOrder) => {
     if (err) {
       return res.status(400).json({
-        error: "Không xoá được đơn hàng!",
+        error: "Order cannot be deleted!",
       });
     }
     res.json({
       deletedOrder,
-      message: "Xoá đơn hàng thành công",
+      message: "Order deleted successfully",
     });
   });
 };
@@ -76,7 +76,7 @@ export const update = (req, res) => {
   order.save((err, data) => {
     if (err) {
       return res.status(400).json({
-        error: "Cập nhật đơn hàng không thành công!",
+        error: "Order update failed!",
       });
     }
     res.json(data);
@@ -157,7 +157,7 @@ export const getOrderDaysSummary = async (req, res) => {
     res.json(respData);
   } catch (error) {
     console.log("Debug_here error: ", error);
-    res.status(500).json({ error: "Có lỗi" });
+    res.status(500).json({ error: "There was an error receiving the report" });
   }
 };
 
@@ -171,7 +171,7 @@ export const getOrderDaysOfMonth = async (req, res) => {
     const isValidDate = dayjs(monthWithZeroAtFirst, "MM/YYYY", true).isValid();
 
     if (!isValidDate) {
-      return res.status(400).json({ error: "Sai định dạng ngày" });
+      return res.status(400).json({ error: "Wrong date format" });
     }
 
     const startDate = dayjs(monthWithZeroAtFirst, "MM/YYYY", true).startOf("month").toDate();
@@ -187,6 +187,6 @@ export const getOrderDaysOfMonth = async (req, res) => {
     res.status(200).json(results);
   } catch (error) {
     console.log("Debug_here error: ", error);
-    res.status(500).json({ error: "Có lỗi xảy ra" });
+    res.status(500).json({ error: "There was an error receiving the report" });
   }
 };

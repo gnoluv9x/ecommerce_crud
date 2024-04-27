@@ -1,14 +1,22 @@
 import React from "react";
 import { useNavigate, NavLink, Outlet } from "react-router-dom";
+import Cookie from "js-cookie";
 
 const AdminLayout = () => {
   const navigate = useNavigate();
 
   const logout = () => {
-    if (localStorage.getItem("user")) {
-      navigate("/signin");
-      return localStorage.removeItem("user");
-    }
+    localStorage.removeItem("user");
+    localStorage.removeItem("cart");
+    localStorage.removeItem("cartNumber");
+    localStorage.removeItem("totalPrice");
+
+    Cookie.remove("refreshToken");
+    Cookie.remove("accessToken");
+
+    dispatchEvent(new Event("storage"));
+
+    navigate("/signin");
   };
   return (
     <div>

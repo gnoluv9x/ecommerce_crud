@@ -8,11 +8,12 @@ export const prices = x => {
   }));
 };
 
-export const ErrorMessage = (error, duration = 1000) => toast.error(error, { autoClose: duration });
+export const ErrorMessage = (error, duration = 1000) =>
+  toast.error(error, { autoClose: duration, theme: "colored" });
 export const SuccessMessage = (success, duration = 1000) =>
-  toast.success(success, { autoClose: duration });
+  toast.success(success, { autoClose: duration, theme: "colored" });
 export const WarningMessage = (warning, duration = 1000) =>
-  toast.warning(warning, { autoClose: duration });
+  toast.warning(warning, { autoClose: duration, theme: "colored" });
 
 export const isAuthenticated = () => {
   if (typeof window == "undefined") {

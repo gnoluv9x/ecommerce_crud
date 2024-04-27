@@ -13,29 +13,20 @@ export const create = (req, res) => {
   });
 };
 export const list = (req, res) => {
-  // let order = req.query.order ? req.query.order : 'asc';
-  // let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
-  // let limit = req.query.limit ? +req.query.limit : 6;
-
-  Category.find()
-    // .select("-photo")
-    // .populate('category')
-    // .sort([[order, sortBy]])
-    // .limit(limit)
-    .exec((err, data) => {
-      if (err) {
-        res.status(400).json({
-          error: "Product not found",
-        });
-      }
-      res.json(data);
-    });
+  Category.find().exec((err, data) => {
+    if (err) {
+      res.status(400).json({
+        error: "Product not found",
+      });
+    }
+    res.json(data);
+  });
 };
 export const categoryById = (req, res, next, id) => {
   Category.findById(id).exec((err, category) => {
     if (err || !category) {
       res.status(404).json({
-        error: "Không tìm thấy danh mục sản phẩm!",
+        error: "No product categories found!",
       });
     }
     req.category = category;
@@ -50,12 +41,12 @@ export const remove = (req, res) => {
   category.remove((err, data) => {
     if (err) {
       return res.status(400).json({
-        error: "Không xoá được danh mục!",
+        error: "Unable to delete directory!",
       });
     }
     res.json({
       data,
-      message: "Xoá danh mục thành công",
+      message: "Directory deleted successfully",
     });
   });
 };
@@ -65,7 +56,7 @@ export const update = (req, res) => {
   category.save((err, data) => {
     if (err) {
       return res.status(400).json({
-        error: "Cập nhật danh mục không thành công!",
+        error: "Category update failed",
       });
     }
     res.json(data);

@@ -4,7 +4,7 @@ export const list = (req, res) => {
   User.find().exec((err, data) => {
     if (err) {
       res.status(400).json({
-        error: "Không tìm thấy User",
+        error: "User not found",
       });
     }
     res.json(data);
@@ -14,7 +14,7 @@ export const userById = (req, res, next, id) => {
   User.findById(id).exec((error, user) => {
     if (error || !user) {
       return res.status(400).json({
-        error: "Không tìm thấy User",
+        error: "User not found",
       });
     }
     req.profile = user;
@@ -31,12 +31,12 @@ export const remove = (req, res) => {
   user.remove((err, deletedUser) => {
     if (err) {
       return res.status(400).json({
-        error: "Xoá không thành công!",
+        error: "User not found!",
       });
     }
     res.json({
       deletedUser,
-      message: "Xoá User thành công",
+      message: "Deleted successfully",
     });
   });
 };

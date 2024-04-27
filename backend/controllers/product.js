@@ -8,7 +8,7 @@ export const create = (req, res) => {
     if (err) {
       console.log(err);
       return res.status(400).json({
-        error: "Thêm sản phẩm không thành công",
+        error: "Adding products failed",
       });
     }
 
@@ -17,7 +17,7 @@ export const create = (req, res) => {
       .exec((err, productWithCategory) => {
         if (err) {
           return res.status(400).json({
-            error: "Không thể lấy thông tin sản phẩm đã thêm",
+            error: "Unable to get added product information",
           });
         }
 
@@ -52,7 +52,7 @@ export const productById = (req, res, next, id) => {
     .exec((err, product) => {
       if (err || !product) {
         res.status(404).json({
-          error: "Không tìm thấy sản phẩm!",
+          error: "No products found!",
         });
       }
       req.product = product;
@@ -69,12 +69,12 @@ export const remove = (req, res) => {
   product.remove((err, data) => {
     if (err) {
       return res.status(400).json({
-        error: "Không xoá được sản phẩm!",
+        error: "The product cannot be deleted!",
       });
     }
     res.json({
       data,
-      message: "Xoá sản phẩm thành công",
+      message: "Product deletion successful",
     });
   });
 };
@@ -87,7 +87,7 @@ export const update = (req, res) => {
   product.save((err, data) => {
     if (err) {
       return res.status(400).json({
-        error: "Cập nhật sản phẩm không thành công!",
+        error: "Product update failed!",
       });
     }
     res.json(data);

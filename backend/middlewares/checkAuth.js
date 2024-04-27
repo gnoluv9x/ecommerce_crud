@@ -6,7 +6,7 @@ export function requireLogin(req, res, next) {
   const accessToken = req.cookies.accessToken;
 
   if (!accessToken) {
-    return res.status(404).json({ error: "Không tìm thấy access token." });
+    return res.status(404).json({ error: "Access token not found." });
   }
 
   try {
@@ -14,13 +14,13 @@ export function requireLogin(req, res, next) {
     const decoded = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
 
     if (decoded.exp * 1000 <= Date.now()) {
-      throw new Error("Hết hạn accessToken");
+      throw new Error("Expired accessToken");
     }
 
     req.user = decoded;
 
     next();
   } catch (error) {
-    res.status(401).json({ error: "Access token không hợp lệ." });
+    res.status(401).json({ error: "Access token is invalid." });
   }
 }

@@ -11,6 +11,7 @@ import {
   getOrderDaysOfMonth,
 } from "../controllers/order";
 import { userById } from "../controllers/user";
+import { requireLogin } from "../middlewares/checkAuth";
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.get("", list);
 //Danh sách đơn hàng theo user
 router.get("/users/:userId", orderByUser);
 //Thêm đơn hàng
-router.post("", create);
+router.post("", requireLogin, create);
 // Tổng quát
 router.get("/summary-days", getOrderDaysSummary);
 // Chi tiết từng ngày trong tháng

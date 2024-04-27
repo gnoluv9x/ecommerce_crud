@@ -121,14 +121,14 @@ export function returnUrl(req, res, next) {
           return res.redirect(`http://localhost:4001/order/${orderId}`);
         } else {
           return res.redirect(
-            `http://localhost:4001/order/${orderId}?message=Thanh+to%C3%A1n+th%C3%A0nh+c%C3%B4ng&checkoutStatus=success`
+            `http://localhost:4001/order/${orderId}?message=Payment%20successfully&checkoutStatus=success`
           );
         }
       }
     );
   } else {
     return res.redirect(
-      `http://localhost:4001/order/${orderId}?message=Thanh+to%C3%A1n+th%E1%BA%A5t+b%E1%BA%A1i&checkoutStatus=fail`
+      `http://localhost:4001/order/${orderId}?message=Payment%20failed&checkoutStatus=fail`
     );
   }
 }
